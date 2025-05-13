@@ -1,0 +1,206 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  firstName String
+  lastName  String
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Application specific fields
+  legacyPages LegacyPage[]
+  profile     Profile?
+
+  @@map("users")
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bio       String?  @db.Text
+  location  String?
+  website   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("profiles")
+}
+
+model LegacyPage {
+  id               String            @id @default(cuid())
+  pageType         PageType
+  slug             String            @unique
+  honoureeName     String
+  dateOfBirth      DateTime
+  dateOfPassing    DateTime?
+  creatorName      String
+  relationship     String
+  storyName        String            @default("Story")
+  story            String            @db.Text
+  coverPhoto       String?
+  honoureePhoto    String?
+  status           PageStatus        @default(DRAFT)
+  userId           String
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  generalKnowledge GeneralKnowledge?
+  mediaItems       MediaItem[]
+  events           Event[]
+  relationships    Relationship[]
+  insights         Insight[]
+  memorialDetails  MemorialDetails?
+  quotes           Quote[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  hasTransitioned  Boolean           @default(false)
+
+  @@index([userId])
+  @@index([slug])
+  @@map("legacy_pages")
+}
+
+model GeneralKnowledge {
+  id           String     @id @default(cuid())
+  personality  String?    @db.Text
+  values       String?    @db.Text
+  beliefs      String?    @db.Text
+  legacyPageId String     @unique
+  legacyPage   LegacyPage @relation(fields: [legacyPageId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("general_knowledge")
+}
+
+model MediaItem {
+  id           String     @id @default(cuid())
+  type         MediaType
+  url          String
+  dateTaken    DateTime
+  location     String?
+  description  String?    @db.Text
+  legacyPageId String
+  legacyPage   LegacyPage @relation(fields: [legacyPageId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([legacyPageId])
+  @@map("media_items")
+}
+
+model Event {
+  id             String     @id @default(cuid())
+  name           String
+  date           DateTime
+  time           String
+  rsvpBy         DateTime?
+  location       String
+  googleMapsCode String?
+  externalUrl    String?
+  message        String?    @db.Text
+  legacyPageId   String
+  legacyPage     LegacyPage @relation(fields: [legacyPageId], references: [id], onDelete: Cascade)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  @@index([legacyPageId])
+  @@map("events")
+}
+
+model Relationship {
+  id           String     @id @default(cuid())
+  type         String // This will store either predefined or custom relationship type
+  isCustomType Boolean    @default(false)
+  name         String
+  legacyPageId String
+  legacyPage   LegacyPage @relation(fields: [legacyPageId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([legacyPageId])
+  @@map("relationships")
+}
+
+model Insight {
+  id           String     @id @default(cuid())
+  message      String     @db.Text
+  legacyPageId String
+  legacyPage   LegacyPage @relation(fields: [legacyPageId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([legacyPageId])
+  @@map("insights")
+}
+
+model MemorialDetails {
+  id                  String     @id @default(cuid())
+  funeralWishes       String?    @db.Text
+  obituary            String?    @db.Text
+  funeralHome         String?
+  viewingDetails      String?
+  processionDetails   String?
+  serviceDetails      String?
+  wakeDetails         String?
+  finalRestingPlace   String?
+  eulogy              String?    @db.Text
+  orderOfService      String?
+  familyMessage       String?    @db.Text
+  memorialVideo       String?
+  tributes            String?    @db.Text
+  messageFromHonouree String?    @db.Text
+  legacyPage          LegacyPage @relation(fields: [legacyPageId], references: [id], onDelete: Cascade)
+  legacyPageId        String     @unique
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  @@map("memorial_details")
+}
+
+model Quote {
+  id           String     @id @default(cuid())
+  text         String     @db.Text
+  author       String?
+  legacyPage   LegacyPage @relation(fields: [legacyPageId], references: [id], onDelete: Cascade)
+  legacyPageId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([legacyPageId])
+  @@map("quotes")
+}
+
+enum PageType {
+  MEMORIAL
+  BIOGRAPHY
+  AUTOBIOGRAPHY
+}
+
+enum PageStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  AUDIO
+}
