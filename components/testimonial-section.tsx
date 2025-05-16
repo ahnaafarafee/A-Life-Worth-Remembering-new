@@ -1,18 +1,27 @@
-import Image from "next/image"
-import SectionHeader from "./section-header"
+import Image from "next/image";
+import SectionHeader from "./section-header";
 
 interface TestimonialProps {
-  quote: string
-  authorName: string
-  authorTitle: string
-  authorImage: string
+  quote: string;
+  authorName: string;
+  authorTitle: string;
+  authorImage: string;
 }
 
-const Testimonial = ({ quote, authorName, authorTitle, authorImage }: TestimonialProps) => {
+const Testimonial = ({
+  quote,
+  authorName,
+  authorTitle,
+  authorImage,
+}: TestimonialProps) => {
   return (
     <div className="custom-tm-item flex-1 min-w-[300px] p-8 relative bg-transparent">
-      <div className="custom-tm-quote text-5xl text-gold-primary font-serif leading-none mb-4">&ldquo;</div>
-      <p className="custom-tm-text text-gray-600 leading-relaxed mb-6 text-base">{quote}</p>
+      <div className="custom-tm-quote text-5xl text-gold-primary font-serif leading-none mb-4">
+        &ldquo;
+      </div>
+      <p className="custom-tm-text text-gray-600 leading-relaxed mb-6 text-base">
+        {quote}
+      </p>
       <div className="custom-tm-author flex items-center">
         <div className="custom-tm-img-wrap w-[60px] h-[60px] rounded-full overflow-hidden mr-4 flex-shrink-0">
           <Image
@@ -24,14 +33,18 @@ const Testimonial = ({ quote, authorName, authorTitle, authorImage }: Testimonia
           />
         </div>
         <div className="custom-tm-info flex flex-col">
-          <span className="custom-tm-name font-bold text-lg text-gray-800">{authorName}</span>
-          <span className="custom-tm-title text-purple-primary text-sm mt-0.5">{authorTitle}</span>
+          <span className="custom-tm-name font-bold text-lg text-gray-800">
+            {authorName}
+          </span>
+          <span className="custom-tm-title text-purple-primary text-sm mt-0.5">
+            {authorTitle}
+          </span>
         </div>
       </div>
       <div className="custom-tm-bg-circle absolute rounded-full bg-purple-primary/[0.03] z-[1] w-[250px] h-[250px] bottom-[-125px] right-[-60px]"></div>
     </div>
-  )
-}
+  );
+};
 
 export default function TestimonialSection() {
   const testimonials = [
@@ -56,10 +69,10 @@ export default function TestimonialSection() {
       authorTitle: "Mother of Three",
       authorImage: "/images/testimonial-1.png",
     },
-  ]
+  ];
 
   return (
-    <section className="custom-tm-section py-16 md:py-24 w-full relative overflow-hidden">
+    <section className="custom-tm-section w-full relative overflow-hidden">
       {/* Background circles for decoration */}
       <div className="custom-tm-bg-circle-extra-1 absolute w-[200px] h-[200px] rounded-full bg-purple-primary/[0.02] bottom-[-50px] left-[15%] z-[1]"></div>
       <div className="custom-tm-bg-circle-extra-2 absolute w-[200px] h-[200px] rounded-full bg-purple-primary/[0.02] bottom-[-50px] right-[15%] z-[1]"></div>
@@ -83,5 +96,5 @@ export default function TestimonialSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

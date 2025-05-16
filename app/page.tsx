@@ -9,6 +9,9 @@ import TestimonialSection from "@/components/testimonial-section";
 import FeaturedMemorials from "@/components/featured-memorials";
 import PricingSection from "@/components/pricing-section";
 import AuthRedirect from "@/components/auth-redirect";
+import FamilyTreeSection from "@/components/family-tree-section";
+import SlidingBanner from "@/components/sliding-banner";
+import MediaMentions from "@/components/media-mentions";
 
 export default function Home() {
   return (
@@ -29,7 +32,7 @@ export default function Home() {
         <Navbar />
 
         {/* Hero Section */}
-        <section className="container mx-auto px-4 py-16 md:py-24 bg-white">
+        <section className="container mx-auto px-4 py-8 md:py-12 bg-white">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div className="space-y-6">
               <h1 className="text-4xl md:text-5xl font-light text-gold-primary leading-tight">
@@ -46,7 +49,7 @@ export default function Home() {
             <div className="flex justify-center">
               <div className="relative w-64 h-64 md:w-80 md:h-80">
                 <Image
-                  src="/images/logo.svg"
+                  src="/images/logo.png"
                   alt="A Life Worth Remembering"
                   fill
                   className="object-contain"
@@ -56,24 +59,46 @@ export default function Home() {
             </div>
           </div>
         </section>
-
+        {/* Sliding Banner */}
+        <div className="mb-4">
+          <SlidingBanner />
+        </div>
         {/* Hero Banner (replacing Sliding Banner) */}
-        <HeroSection />
+        <div className="py-8 md:py-12">
+          <HeroSection />
+        </div>
 
         {/* Why Choose Section */}
-        <WhyChooseSection />
+        <div className="py-8 md:py-12">
+          <WhyChooseSection />
+        </div>
 
         {/* Featured Memorials - New Modern Design */}
-        <FeaturedMemorials />
+        <div className="py-8 md:py-12">
+          <FeaturedMemorials />
+        </div>
+
+        {/* Family Tree Section */}
+        <div className="py-8 md:py-12">
+          <FamilyTreeSection />
+        </div>
 
         {/* How It Works - New Design */}
-        <HowItWorks />
+        <div className="py-8 md:py-12">
+          <HowItWorks />
+        </div>
 
         {/* Pricing Section */}
-        <PricingSection />
+        <div className="py-8 md:py-12">
+          <PricingSection />
+        </div>
 
         {/* Testimonials - New Design */}
-        <TestimonialSection />
+        <div className="py-8 md:py-12">
+          <TestimonialSection />
+        </div>
+        {/* Media Mentions Section */}
+        <MediaMentions />
 
         <Footer />
       </div>

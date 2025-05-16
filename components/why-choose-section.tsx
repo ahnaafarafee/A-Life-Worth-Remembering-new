@@ -1,5 +1,5 @@
-import Image from "next/image"
-import SectionHeader from "./section-header"
+import Image from "next/image";
+import SectionHeader from "./section-header";
 
 export default function WhyChooseSection() {
   const features = [
@@ -58,57 +58,60 @@ export default function WhyChooseSection() {
       description:
         "Your memories are accessible from any device with an internet connection. Whether you're at home or on the go, you can revisit and share your loved one's legacy with ease.",
     },
-  ]
+    {
+      title: "Secure and Private",
+      description:
+        "We prioritize the security and privacy of your data. Rest assured that your memories are safe with us, accessible only to those you choose to share them with.",
+    },
+  ];
 
   return (
-    <section className="lwm-why-choose-section max-w-7xl mx-auto py-12 md:py-16 px-5 relative overflow-hidden">
+    <section className="lwm-why-choose-section max-w-7xl mx-auto px-5 relative overflow-hidden">
       {/* Background gradient effect */}
       <div className="absolute inset-0 bg-white bg-[radial-gradient(circle_at_90%_10%,rgba(212,175,55,0.03)_0%,rgba(255,255,255,0)_50%),radial-gradient(circle_at_10%_90%,rgba(212,175,55,0.03)_0%,rgba(255,255,255,0)_50%)]"></div>
 
-      {/* Floating hearts for decoration */}
-      <div className="absolute w-[25px] h-[25px] top-[10%] left-[5%] opacity-60 animate-float-1">
-        <Image src="/images/heart.png" alt="" fill className="object-contain" />
-      </div>
-      <div className="absolute w-[25px] h-[25px] top-[20%] right-[8%] opacity-60 animate-float-2">
-        <Image src="/images/heart.png" alt="" fill className="object-contain" />
-      </div>
-      <div className="absolute w-[25px] h-[25px] bottom-[15%] left-[10%] opacity-60 animate-float-3">
-        <Image src="/images/heart.png" alt="" fill className="object-contain" />
-      </div>
+      <div className="relative z-10">
+        <SectionHeader
+          title="WHY CHOOSE A LIFE WORTH REMEMBERING?"
+          subtitle="At 'A Life Worth Remembering,' we understand the profound impact of preserving memories and stories for future generations. Here's why you should choose us to craft your online legacy."
+        />
 
-      <SectionHeader
-        title="WHY CHOOSE A LIFE WORTH REMEMBERING?"
-        subtitle="At 'A Life Worth Remembering,' we understand the profound impact of preserving memories and stories for future generations. Here's why you should choose us to craft your online legacy."
-      />
+        <div className="lwm-features-container relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 z-10 justify-center">
+          {/* Decorative path - hidden on mobile */}
+          <div className="absolute top-0 left-1/2 w-4/5 h-full border-2 border-dashed border-gold-primary/30 rounded-full -translate-x-1/2 z-0 pointer-events-none hidden lg:block"></div>
 
-      <div className="lwm-features-container relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 z-10">
-        {/* Decorative path - hidden on mobile */}
-        <div className="absolute top-0 left-1/2 w-4/5 h-full border-2 border-dashed border-gold-primary/30 rounded-full -translate-x-1/2 z-0 pointer-events-none hidden lg:block"></div>
+          {/* Feature cards */}
+          {features.map((feature, index) => (
+            <div
+              key={index}
+              className="lwm-feature-card bg-gradient-to-br from-white to-[#fffdf5] rounded-xl p-6 shadow-gold transition-all duration-300 hover:-translate-y-1 hover:shadow-gold-hover relative z-10"
+            >
+              <h3 className="lwm-feature-title text-gold-primary text-xl mb-4 font-semibold pl-8 relative">
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5">
+                  <Image
+                    src="/images/heart.png"
+                    alt=""
+                    width={20}
+                    height={20}
+                    className="object-contain"
+                  />
+                </span>
+                {feature.title}
+              </h3>
+              <p className="lwm-feature-description text-gray-600 leading-relaxed text-sm md:text-base">
+                {feature.description}
+              </p>
+            </div>
+          ))}
+        </div>
 
-        {/* Feature cards */}
-        {features.map((feature, index) => (
-          <div
-            key={index}
-            className="lwm-feature-card bg-gradient-to-br from-white to-[#fffdf5] rounded-xl p-6 shadow-gold transition-all duration-300 hover:-translate-y-1 hover:shadow-gold-hover relative z-10"
-          >
-            <h3 className="lwm-feature-title text-gold-primary text-xl mb-4 font-semibold pl-8 relative">
-              <span className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5">
-                <Image src="/images/heart.png" alt="" width={20} height={20} className="object-contain" />
-              </span>
-              {feature.title}
-            </h3>
-            <p className="lwm-feature-description text-gray-600 leading-relaxed text-sm md:text-base">
-              {feature.description}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      <div className="lwm-final-cta text-center mt-16 p-8 bg-gradient-to-br from-[#fffdf5] to-white rounded-xl shadow-gold-final border border-gold-primary/50">
-        <p className="lwm-final-cta-text text-lg md:text-xl text-gold-primary font-medium max-w-3xl mx-auto leading-relaxed">
-          Choose "A Life Worth Remembering" to honour a life lived, and ensure that every human story lives on.
-        </p>
+        <div className="lwm-final-cta text-center mt-16 p-8 bg-gradient-to-br from-[#fffdf5] to-white rounded-xl shadow-gold-final border border-gold-primary/50">
+          <p className="lwm-final-cta-text text-lg md:text-xl text-gold-primary font-medium max-w-3xl mx-auto leading-relaxed">
+            Choose "A Life Worth Remembering" to honour a life lived, and ensure
+            that every human story lives on.
+          </p>
+        </div>
       </div>
     </section>
-  )
+  );
 }

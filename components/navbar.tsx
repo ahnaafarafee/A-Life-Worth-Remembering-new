@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { GoldButton } from "./gold-button";
 import { useLegacyPage } from "@/hooks/useLegacyPage";
@@ -17,34 +17,34 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center">
-            <span className="text-gold-primary font-light text-2xl">
+            <span className="text-gold-primary font-light text-xl">
               A Life Worth Remembering
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-6">
             <Link
               href="/about"
-              className="text-gray-700 hover:text-gold-primary transition-colors"
+              className="text-gray-700 hover:text-gold-primary transition-colors text-sm font-medium"
             >
               ABOUT US
             </Link>
             <Link
               href="/pricing"
-              className="text-gray-700 hover:text-gold-primary transition-colors"
+              className="text-gray-700 hover:text-gold-primary transition-colors text-sm font-medium"
             >
               PRICING PLANS
             </Link>
             <Link
               href="/create-a-page"
-              className="text-gray-700 hover:text-gold-primary transition-colors"
+              className="text-gray-700 hover:text-gold-primary transition-colors text-sm font-medium"
             >
               CREATE A PAGE
             </Link>
             <Link
               href="/contact"
-              className="text-gray-700 hover:text-gold-primary transition-colors"
+              className="text-gray-700 hover:text-gold-primary transition-colors text-sm font-medium"
             >
               CONTACT US
             </Link>
@@ -52,12 +52,20 @@ export default function Navbar() {
               {!isLoading && legacyPage && (
                 <Link
                   href={`/legacy/${legacyPage.slug}`}
-                  className="text-gray-700 hover:text-gold-primary transition-colors"
+                  className="text-gray-700 hover:text-gold-primary transition-colors text-sm font-medium"
                 >
                   MY PAGE
                 </Link>
               )}
             </SignedIn>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search memorials..."
+                className="w-40 px-3 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-transparent"
+              />
+              <Search className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            </div>
             <SignedOut>
               <GoldButton>
                 <SignInButton />
