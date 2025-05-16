@@ -37,17 +37,33 @@ export default function Navbar() {
               PRICING PLANS
             </Link>
             <Link
-              href="/create-a-page"
-              className="text-gray-700 hover:text-gold-primary transition-colors text-sm font-medium"
-            >
-              CREATE A PAGE
-            </Link>
-            <Link
               href="/contact"
               className="text-gray-700 hover:text-gold-primary transition-colors text-sm font-medium"
             >
               CONTACT US
             </Link>
+            {!isLoading && !legacyPage && (
+              <Link
+                href="/create-a-page"
+                className="text-gray-700 hover:text-gold-primary transition-colors text-sm font-medium"
+              >
+                CREATE A PAGE
+              </Link>
+            )}
+            {!isLoading && legacyPage && (
+              <Link
+                href={`/legacy/${legacyPage.slug}/edit`}
+                className="text-gray-700 hover:text-gold-primary transition-colors text-sm font-medium"
+              >
+                EDIT PAGE
+              </Link>
+            )}
+            {isLoading && (
+              <div className="w-6 h-6 flex items-center justify-center">
+                <div className="navbar-gold-spinner w-6 h-6"></div>
+              </div>
+            )}
+
             <SignedIn>
               {!isLoading && legacyPage && (
                 <Link
@@ -56,6 +72,11 @@ export default function Navbar() {
                 >
                   MY PAGE
                 </Link>
+              )}
+              {isLoading && (
+                <div className="w-6 h-6 flex items-center justify-center">
+                  <div className="navbar-gold-spinner w-6 h-6"></div>
+                </div>
               )}
             </SignedIn>
             <div className="relative">
@@ -72,7 +93,13 @@ export default function Navbar() {
               </GoldButton>
             </SignedOut>
             <SignedIn>
-              <UserButton />
+              {!isLoading ? (
+                <UserButton />
+              ) : (
+                <div className="w-8 h-8 flex items-center justify-center">
+                  <div className="navbar-gold-spinner w-8 h-8"></div>
+                </div>
+              )}
             </SignedIn>
           </nav>
 
@@ -106,13 +133,24 @@ export default function Navbar() {
               PRICING PLANS
             </Link>
             <SignedIn>
-              <Link
-                href="/create-a-page"
-                className="text-gray-700 hover:text-gold-primary transition-colors py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                CREATE A PAGE
-              </Link>
+              {!isLoading && !legacyPage && (
+                <Link
+                  href="/create-a-page"
+                  className="text-gray-700 hover:text-gold-primary transition-colors py-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  CREATE A PAGE
+                </Link>
+              )}
+              {!isLoading && legacyPage && (
+                <Link
+                  href={`/legacy/${legacyPage.slug}/edit`}
+                  className="text-gray-700 hover:text-gold-primary transition-colors py-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  EDIT PAGE
+                </Link>
+              )}
             </SignedIn>
             <Link
               href="/contact"
@@ -131,15 +169,26 @@ export default function Navbar() {
                   MY PAGE
                 </Link>
               )}
+              {isLoading && (
+                <div className="w-6 h-6 flex items-center justify-center mx-2">
+                  <div className="navbar-gold-spinner w-6 h-6"></div>
+                </div>
+              )}
+            </SignedIn>
+            <SignedIn>
+              {!isLoading ? (
+                <UserButton />
+              ) : (
+                <div className="w-8 h-8 flex items-center justify-center mx-2">
+                  <div className="navbar-gold-spinner w-8 h-8"></div>
+                </div>
+              )}
             </SignedIn>
             <SignedOut>
               <GoldButton>
                 <SignInButton />
               </GoldButton>
             </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
           </nav>
         </div>
       )}
