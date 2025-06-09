@@ -187,8 +187,12 @@ export async function PUT(
     // Process photos
     const photos = [];
     let photoIndex = 0;
-    while (formData.has(`photos[${photoIndex}][file]`)) {
+    while (
+      formData.has(`photos[${photoIndex}][file]`) ||
+      formData.has(`photos[${photoIndex}][preview]`)
+    ) {
       const file = formData.get(`photos[${photoIndex}][file]`) as File;
+      const preview = formData.get(`photos[${photoIndex}][preview]`) as string;
       const dateTaken = formData.get(
         `photos[${photoIndex}][dateTaken]`
       ) as string;
@@ -200,6 +204,7 @@ export async function PUT(
       ) as string;
 
       if (file && file.size > 0) {
+        // New photo
         const path = await uploadToSupabase(
           file,
           `photo-${Date.now()}-${photoIndex}`
@@ -211,6 +216,15 @@ export async function PUT(
           location: location || null,
           description: description || null,
         });
+      } else if (preview) {
+        // Existing photo
+        photos.push({
+          type: "IMAGE" as MediaType,
+          url: preview,
+          dateTaken: new Date(dateTaken),
+          location: location || null,
+          description: description || null,
+        });
       }
       photoIndex++;
     }
@@ -218,8 +232,14 @@ export async function PUT(
     // Process sound clips
     const soundClips = [];
     let soundClipIndex = 0;
-    while (formData.has(`soundClips[${soundClipIndex}][file]`)) {
+    while (
+      formData.has(`soundClips[${soundClipIndex}][file]`) ||
+      formData.has(`soundClips[${soundClipIndex}][preview]`)
+    ) {
       const file = formData.get(`soundClips[${soundClipIndex}][file]`) as File;
+      const preview = formData.get(
+        `soundClips[${soundClipIndex}][preview]`
+      ) as string;
       const dateTaken = formData.get(
         `soundClips[${soundClipIndex}][dateTaken]`
       ) as string;
@@ -231,6 +251,7 @@ export async function PUT(
       ) as string;
 
       if (file && file.size > 0) {
+        // New sound clip
         const path = await uploadToSupabase(
           file,
           `sound-${Date.now()}-${soundClipIndex}`
@@ -238,6 +259,15 @@ export async function PUT(
         soundClips.push({
           type: "AUDIO" as MediaType,
           url: path,
+          dateTaken: new Date(dateTaken),
+          location: location || null,
+          description: description || null,
+        });
+      } else if (preview) {
+        // Existing sound clip
+        soundClips.push({
+          type: "AUDIO" as MediaType,
+          url: preview,
           dateTaken: new Date(dateTaken),
           location: location || null,
           description: description || null,

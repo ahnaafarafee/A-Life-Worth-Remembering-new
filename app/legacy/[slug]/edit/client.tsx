@@ -374,8 +374,7 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
       soundClips.forEach((clip, index) => {
         if (clip.file) {
           formData.append(`soundClips[${index}][file]`, clip.file);
-        }
-        if (clip.preview) {
+        } else if (clip.preview) {
           formData.append(`soundClips[${index}][preview]`, clip.preview);
         }
         formData.append(`soundClips[${index}][dateTaken]`, clip.dateTaken);
@@ -674,31 +673,34 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
               Basic Information
             </h3>
 
-            {/* Page Type Selection */}
-            <div className="space-y-4">
-              <label className="block text-gold-primary font-bold">
+            {/* Page Type */}
+            <div className="mb-6">
+              <label className="block text-gold-primary font-bold mb-2">
                 Page Type
               </label>
-              <select
-                {...register("pageType")}
-                className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3 focus:border-gold-primary focus:ring-1 focus:ring-gold-primary"
-                onChange={(e) => setPageType(e.target.value as PageType)}
-              >
-                <option value="">Select a page type</option>
-                <option value="AUTOBIOGRAPHY">Autobiography</option>
-                <option value="BIOGRAPHY">Biography</option>
-                <option value="MEMORIAL">Memorial</option>
-              </select>
-              {pageType && (
-                <p className="text-gold-secondary text-sm mt-2">
-                  {pageType === "AUTOBIOGRAPHY" &&
-                    "A firsthand story created by the honouree, providing a personal account of their life."}
-                  {pageType === "BIOGRAPHY" &&
-                    "A page created for a child or adult who is unable to create the page themselves. It is crafted by the next of kin or someone with legal authority to act on behalf of the honouree."}
-                  {pageType === "MEMORIAL" &&
-                    "A page dedicated to the memory of an individual, created by the next of kin or someone with legal authority to act on behalf of the honouree."}
-                </p>
-              )}
+              <div className="relative">
+                <select
+                  {...register("pageType")}
+                  disabled
+                  className="w-full bg-gray-100 border-2 border-gold-primary/50 text-gray-700 rounded-md p-3 cursor-not-allowed appearance-none"
+                  value={pageType}
+                >
+                  <option value="LEGACY">Legacy Page</option>
+                  <option value="MEMORIAL">Memorial Page</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                  <svg
+                    className="fill-current h-4 w-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                  </svg>
+                </div>
+              </div>
+              <p className="text-sm text-gold-secondary mt-2">
+                Page type cannot be changed after creation
+              </p>
             </div>
 
             {/* Next of Kin Checkbox for Memorial */}
@@ -792,433 +794,293 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
             </div>
 
             {/* Photo Upload Fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-              <div>
-                <label className="block text-gold-primary font-bold">
-                  Honouree Photo
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        setHonoureePhotoPreview(reader.result as string);
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                  className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                />
-                {honoureePhotoPreview && (
-                  <div className="mt-2">
-                    <img
-                      src={honoureePhotoPreview}
-                      alt="Honouree photo preview"
-                      className="w-32 h-32 object-cover rounded-md"
-                    />
-                  </div>
-                )}
-                <p className="text-sm text-gold-secondary mt-1">
-                  Upload a clear photo of the honouree
-                </p>
-              </div>
-              <div>
-                <label className="block text-gold-primary font-bold">
-                  Cover Photo
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        setCoverPhotoPreview(reader.result as string);
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                  className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                />
-                {coverPhotoPreview && (
-                  <div className="mt-2">
-                    <img
-                      src={coverPhotoPreview}
-                      alt="Cover photo preview"
-                      className="w-32 h-32 object-cover rounded-md"
-                    />
-                  </div>
-                )}
-                <p className="text-sm text-gold-secondary mt-1">
-                  Upload a cover photo for the legacy page
-                </p>
-              </div>
-            </div>
+            <div className="space-y-6">
+              <h3 className="text-xl font-bold text-gold-primary">Photos</h3>
 
-            <div>
-              <label className="block text-gold-primary font-bold">
-                Story Title
-              </label>
-              <input
-                {...register("storyName")}
-                placeholder="e.g., My Life Journey, Memories, Legacy"
-                className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3 mb-4"
-              />
-              <label className="block text-gold-primary font-bold">
-                Story Content
-              </label>
-              <textarea
-                {...register("story")}
-                rows={6}
-                className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                placeholder="Share the honouree's story..."
-              />
-            </div>
-          </div>
+              {photos.length > 0 && (
+                <div className="space-y-4">
+                  {photos.map((photo, index) => (
+                    <div
+                      key={index}
+                      className="bg-white/5 p-4 rounded-lg border border-gold-primary/50"
+                    >
+                      <div className="flex justify-between items-start mb-4">
+                        <h4 className="text-gold-primary font-bold">
+                          Photo {index + 1}
+                        </h4>
+                        <button
+                          type="button"
+                          onClick={() => removeItem(index, "photos")}
+                          className="text-red-500 hover:text-red-600"
+                        >
+                          Remove
+                        </button>
+                      </div>
 
-          {/* General Knowledge Section */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-bold text-gold-primary">
-              General Knowledge
-            </h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-gold-primary font-bold">
-                  Personality
-                </label>
-                <textarea
-                  {...register("personality")}
-                  rows={3}
-                  className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                  placeholder="Describe the honouree's personality..."
-                />
-              </div>
-              <div>
-                <label className="block text-gold-primary font-bold">
-                  Values
-                </label>
-                <textarea
-                  {...register("values")}
-                  rows={3}
-                  className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                  placeholder="Share the honouree's values..."
-                />
-              </div>
-              <div>
-                <label className="block text-gold-primary font-bold">
-                  Beliefs
-                </label>
-                <textarea
-                  {...register("beliefs")}
-                  rows={3}
-                  className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                  placeholder="Share the honouree's beliefs..."
-                />
-              </div>
-            </div>
-          </div>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            Photo
+                          </label>
+                          <div className="flex items-center space-x-4">
+                            {photo.preview && (
+                              <div className="relative w-24 h-24">
+                                <Image
+                                  src={photo.preview}
+                                  alt={`Preview ${index + 1}`}
+                                  fill
+                                  className="object-cover rounded-lg"
+                                />
+                              </div>
+                            )}
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) =>
+                                handlePhotoChange(index, e.target.files?.[0])
+                              }
+                              className="flex-1"
+                            />
+                          </div>
+                        </div>
 
-          {/* Gallery Section */}
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h3 className="text-xl font-bold text-gold-primary">Gallery</h3>
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            Date Taken
+                          </label>
+                          <input
+                            type="date"
+                            value={photo.dateTaken}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "dateTaken",
+                                e.target.value,
+                                "photos"
+                              )
+                            }
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            Location
+                          </label>
+                          <input
+                            type="text"
+                            value={photo.location}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "location",
+                                e.target.value,
+                                "photos"
+                              )
+                            }
+                            placeholder="Where was this photo taken?"
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            Description
+                          </label>
+                          <textarea
+                            value={photo.description}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "description",
+                                e.target.value,
+                                "photos"
+                              )
+                            }
+                            placeholder="Describe this photo..."
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                            rows={3}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <button
                 type="button"
                 onClick={handlePhotoUpload}
-                className="bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
+                className="w-full bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
               >
                 Add Photo
               </button>
             </div>
 
-            {photos.length > 0 && (
-              <div className="space-y-4">
-                {photos.map((photo, index) => (
-                  <div
-                    key={index}
-                    className="bg-white/5 p-4 rounded-lg border border-gold-primary/50"
-                  >
-                    <div className="flex justify-between items-start mb-4">
-                      <h4 className="text-gold-primary font-bold">
-                        Photo {index + 1}
-                      </h4>
-                      <button
-                        type="button"
-                        onClick={() => removeItem(index, "photos")}
-                        className="text-red-500 hover:text-red-600"
-                      >
-                        Remove
-                      </button>
-                    </div>
-
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-gold-secondary mb-1">
-                          Photo Upload
-                        </label>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) =>
-                            handlePhotoChange(index, e.target.files?.[0])
-                          }
-                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                        />
-                        {photo.preview && (
-                          <div className="mt-2">
-                            <img
-                              src={photo.preview}
-                              alt={`Photo ${index + 1} preview`}
-                              className="w-32 h-32 object-cover rounded-md"
-                            />
-                          </div>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="block text-gold-secondary mb-1">
-                          Date Taken
-                        </label>
-                        <input
-                          type="date"
-                          value={photo.dateTaken}
-                          onChange={(e) =>
-                            handleItemChange(
-                              index,
-                              "dateTaken",
-                              e.target.value,
-                              "photos"
-                            )
-                          }
-                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-gold-secondary mb-1">
-                          Location
-                        </label>
-                        <input
-                          type="text"
-                          value={photo.location}
-                          onChange={(e) =>
-                            handleItemChange(
-                              index,
-                              "location",
-                              e.target.value,
-                              "photos"
-                            )
-                          }
-                          placeholder="Where was this taken?"
-                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-gold-secondary mb-1">
-                          Description
-                        </label>
-                        <textarea
-                          value={photo.description}
-                          onChange={(e) =>
-                            handleItemChange(
-                              index,
-                              "description",
-                              e.target.value,
-                              "photos"
-                            )
-                          }
-                          placeholder="Tell us about this photo..."
-                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                          rows={3}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Sound Clips Section */}
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
+            {/* Sound Clips Section */}
+            <div className="space-y-6">
               <h3 className="text-xl font-bold text-gold-primary">
                 Sound Clips
               </h3>
+
+              {soundClips.length > 0 && (
+                <div className="space-y-4">
+                  {soundClips.map((clip, index) => (
+                    <div
+                      key={index}
+                      className="bg-white/5 p-4 rounded-lg border border-gold-primary/50"
+                    >
+                      <div className="flex justify-between items-start mb-4">
+                        <h4 className="text-gold-primary font-bold">
+                          Sound Clip {index + 1}
+                        </h4>
+                        <button
+                          type="button"
+                          onClick={() => removeItem(index, "soundClips")}
+                          className="text-red-500 hover:text-red-600"
+                        >
+                          Remove
+                        </button>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            Sound Clip
+                          </label>
+                          <input
+                            type="file"
+                            accept="audio/*"
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "file",
+                                e.target.files?.[0],
+                                "soundClips"
+                              )
+                            }
+                            className="w-full"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            Date Recorded
+                          </label>
+                          <input
+                            type="date"
+                            value={clip.dateTaken}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "dateTaken",
+                                e.target.value,
+                                "soundClips"
+                              )
+                            }
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            Location
+                          </label>
+                          <input
+                            type="text"
+                            value={clip.location}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "location",
+                                e.target.value,
+                                "soundClips"
+                              )
+                            }
+                            placeholder="Where was this recorded?"
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            Description
+                          </label>
+                          <textarea
+                            value={clip.description}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "description",
+                                e.target.value,
+                                "soundClips"
+                              )
+                            }
+                            placeholder="Describe this sound clip..."
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                            rows={3}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <button
                 type="button"
                 onClick={handleSoundClipUpload}
-                className="bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
+                className="w-full bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
               >
                 Add Sound Clip
               </button>
             </div>
 
-            {soundClips.length > 0 && (
-              <div className="space-y-4">
-                {soundClips.map((clip, index) => (
-                  <div
-                    key={index}
-                    className="bg-white/5 p-4 rounded-lg border border-gold-primary/50"
-                  >
-                    <div className="flex justify-between items-start mb-4">
-                      <h4 className="text-gold-primary font-bold">
-                        Sound Clip {index + 1}
-                      </h4>
-                      <button
-                        type="button"
-                        onClick={() => removeItem(index, "soundClips")}
-                        className="text-red-500 hover:text-red-600"
-                      >
-                        Remove
-                      </button>
-                    </div>
-
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-gold-secondary mb-1">
-                          Audio Upload
-                        </label>
-                        <input
-                          type="file"
-                          accept="audio/*"
-                          onChange={(e) =>
-                            handleItemChange(
-                              index,
-                              "file",
-                              e.target.files?.[0],
-                              "soundClips"
-                            )
-                          }
-                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-gold-secondary mb-1">
-                          Date Recorded
-                        </label>
-                        <input
-                          type="date"
-                          value={clip.dateTaken}
-                          onChange={(e) =>
-                            handleItemChange(
-                              index,
-                              "dateTaken",
-                              e.target.value,
-                              "soundClips"
-                            )
-                          }
-                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-gold-secondary mb-1">
-                          Location
-                        </label>
-                        <input
-                          type="text"
-                          value={clip.location}
-                          onChange={(e) =>
-                            handleItemChange(
-                              index,
-                              "location",
-                              e.target.value,
-                              "soundClips"
-                            )
-                          }
-                          placeholder="Where was this recorded?"
-                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-gold-secondary mb-1">
-                          Description
-                        </label>
-                        <textarea
-                          value={clip.description}
-                          onChange={(e) =>
-                            handleItemChange(
-                              index,
-                              "description",
-                              e.target.value,
-                              "soundClips"
-                            )
-                          }
-                          placeholder="Tell us about this recording..."
-                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                          rows={3}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Events Section */}
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
+            {/* Events Section */}
+            <div className="space-y-6">
               <h3 className="text-xl font-bold text-gold-primary">Events</h3>
-              <button
-                type="button"
-                onClick={handleAddEvent}
-                className="bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
-              >
-                Add Event
-              </button>
-            </div>
 
-            {events.length > 0 && (
-              <div className="space-y-4">
-                {events.map((event, index) => (
-                  <div
-                    key={index}
-                    className="bg-white/5 p-4 rounded-lg border border-gold-primary/50"
-                  >
-                    <div className="flex justify-between items-start mb-4">
-                      <h4 className="text-gold-primary font-bold">
-                        Event {index + 1}
-                      </h4>
-                      <button
-                        type="button"
-                        onClick={() => removeItem(index, "events")}
-                        className="text-red-500 hover:text-red-600"
-                      >
-                        Remove
-                      </button>
-                    </div>
-
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-gold-secondary mb-1">
-                          Event Name
-                        </label>
-                        <input
-                          type="text"
-                          value={event.name}
-                          onChange={(e) =>
-                            handleItemChange(
-                              index,
-                              "name",
-                              e.target.value,
-                              "events"
-                            )
-                          }
-                          placeholder="Enter event name"
-                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                        />
+              {events.length > 0 && (
+                <div className="space-y-4">
+                  {events.map((event, index) => (
+                    <div
+                      key={index}
+                      className="bg-white/5 p-4 rounded-lg border border-gold-primary/50"
+                    >
+                      <div className="flex justify-between items-start mb-4">
+                        <h4 className="text-gold-primary font-bold">
+                          Event {index + 1}
+                        </h4>
+                        <button
+                          type="button"
+                          onClick={() => removeItem(index, "events")}
+                          className="text-red-500 hover:text-red-600"
+                        >
+                          Remove
+                        </button>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            Event Name
+                          </label>
+                          <input
+                            type="text"
+                            value={event.name}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "name",
+                                e.target.value,
+                                "events"
+                              )
+                            }
+                            placeholder="Name of the event"
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                          />
+                        </div>
+
                         <div>
                           <label className="block text-gold-secondary mb-1">
                             Date
@@ -1237,6 +1099,7 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
                             className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
                           />
                         </div>
+
                         <div>
                           <label className="block text-gold-secondary mb-1">
                             Time
@@ -1255,149 +1118,146 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
                             className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
                           />
                         </div>
-                      </div>
 
-                      <div>
-                        <label className="block text-gold-secondary mb-1">
-                          RSVP By
-                        </label>
-                        <input
-                          type="datetime-local"
-                          value={event.rsvpBy}
-                          onChange={(e) =>
-                            handleItemChange(
-                              index,
-                              "rsvpBy",
-                              e.target.value,
-                              "events"
-                            )
-                          }
-                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                        />
-                      </div>
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            RSVP By
+                          </label>
+                          <input
+                            type="date"
+                            value={event.rsvpBy}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "rsvpBy",
+                                e.target.value,
+                                "events"
+                              )
+                            }
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                          />
+                        </div>
 
-                      <div>
-                        <label className="block text-gold-secondary mb-1">
-                          Location
-                        </label>
-                        <input
-                          type="text"
-                          value={event.location}
-                          onChange={(e) =>
-                            handleItemChange(
-                              index,
-                              "location",
-                              e.target.value,
-                              "events"
-                            )
-                          }
-                          placeholder="Enter event location"
-                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                        />
-                      </div>
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            Location
+                          </label>
+                          <input
+                            type="text"
+                            value={event.location}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "location",
+                                e.target.value,
+                                "events"
+                              )
+                            }
+                            placeholder="Where is the event?"
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                          />
+                        </div>
 
-                      <div>
-                        <label className="block text-gold-secondary mb-1">
-                          Google Maps GEO Code
-                        </label>
-                        <input
-                          type="text"
-                          value={event.googleMapsCode}
-                          onChange={(e) =>
-                            handleItemChange(
-                              index,
-                              "googleMapsCode",
-                              e.target.value,
-                              "events"
-                            )
-                          }
-                          placeholder="Enter Google Maps GEO Code"
-                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                        />
-                      </div>
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            Google Maps Code
+                          </label>
+                          <input
+                            type="text"
+                            value={event.googleMapsCode}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "googleMapsCode",
+                                e.target.value,
+                                "events"
+                              )
+                            }
+                            placeholder="Google Maps location code"
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                          />
+                        </div>
 
-                      <div>
-                        <label className="block text-gold-secondary mb-1">
-                          External Event URL
-                        </label>
-                        <input
-                          type="url"
-                          value={event.externalUrl}
-                          onChange={(e) =>
-                            handleItemChange(
-                              index,
-                              "externalUrl",
-                              e.target.value,
-                              "events"
-                            )
-                          }
-                          placeholder="Enter external event URL"
-                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                        />
-                      </div>
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            External URL
+                          </label>
+                          <input
+                            type="url"
+                            value={event.externalUrl}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "externalUrl",
+                                e.target.value,
+                                "events"
+                              )
+                            }
+                            placeholder="Event website or registration link"
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                          />
+                        </div>
 
-                      <div>
-                        <label className="block text-gold-secondary mb-1">
-                          Message
-                        </label>
-                        <textarea
-                          value={event.message}
-                          onChange={(e) =>
-                            handleItemChange(
-                              index,
-                              "message",
-                              e.target.value,
-                              "events"
-                            )
-                          }
-                          placeholder="Enter event message or description"
-                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                          rows={3}
-                        />
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            Message
+                          </label>
+                          <textarea
+                            value={event.message}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "message",
+                                e.target.value,
+                                "events"
+                              )
+                            }
+                            placeholder="Additional event details..."
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                            rows={3}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+                  ))}
+                </div>
+              )}
 
-          {/* Relationships Section */}
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h3 className="text-xl font-bold text-gold-primary">
-                Relationships
-              </h3>
               <button
                 type="button"
-                onClick={handleAddRelationship}
-                className="bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
+                onClick={handleAddEvent}
+                className="w-full bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
               >
-                Add Relationship
+                Add Event
               </button>
             </div>
 
-            {relationships.length > 0 && (
-              <div className="space-y-4">
-                {relationships.map((relationship, index) => (
-                  <div
-                    key={index}
-                    className="bg-white/5 p-4 rounded-lg border border-gold-primary/50"
-                  >
-                    <div className="flex justify-between items-start mb-4">
-                      <h4 className="text-gold-primary font-bold">
-                        Relationship {index + 1}
-                      </h4>
-                      <button
-                        type="button"
-                        onClick={() => removeItem(index, "relationships")}
-                        className="text-red-500 hover:text-red-600"
-                      >
-                        Remove
-                      </button>
-                    </div>
+            {/* Relationships Section */}
+            <div className="space-y-6">
+              <h3 className="text-xl font-bold text-gold-primary">
+                Relationships
+              </h3>
 
-                    <div className="space-y-4">
+              {relationships.length > 0 && (
+                <div className="space-y-4">
+                  {relationships.map((relationship, index) => (
+                    <div
+                      key={index}
+                      className="bg-white/5 p-4 rounded-lg border border-gold-primary/50"
+                    >
+                      <div className="flex justify-between items-start mb-4">
+                        <h4 className="text-gold-primary font-bold">
+                          Relationship {index + 1}
+                        </h4>
+                        <button
+                          type="button"
+                          onClick={() => removeItem(index, "relationships")}
+                          className="text-red-500 hover:text-red-600"
+                        >
+                          Remove
+                        </button>
+                      </div>
+
                       <div>
                         <label className="block text-gold-secondary mb-1">
                           Relationship Type
@@ -1423,7 +1283,7 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
                         </select>
                       </div>
 
-                      <div>
+                      <div className="mt-4">
                         <label className="block text-gold-secondary mb-1">
                           Name
                         </label>
@@ -1443,104 +1303,100 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
                         />
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+                  ))}
+                </div>
+              )}
 
-          {/* Insights Section */}
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
+              <button
+                type="button"
+                onClick={handleAddRelationship}
+                className="w-full bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
+              >
+                Add Relationship
+              </button>
+            </div>
+
+            {/* Insights Section */}
+            <div className="space-y-6">
               <h3 className="text-xl font-bold text-gold-primary">Insights</h3>
+
+              {insights.length > 0 && (
+                <div className="space-y-4">
+                  {insights.map((insight, index) => (
+                    <div
+                      key={index}
+                      className="bg-white/5 p-4 rounded-lg border border-gold-primary/50"
+                    >
+                      <div className="flex justify-between items-start mb-4">
+                        <h4 className="text-gold-primary font-bold">
+                          Insight {index + 1}
+                        </h4>
+                        <button
+                          type="button"
+                          onClick={() => removeItem(index, "insights")}
+                          className="text-red-500 hover:text-red-600"
+                        >
+                          Remove
+                        </button>
+                      </div>
+
+                      <div>
+                        <label className="block text-gold-secondary mb-1">
+                          Message
+                        </label>
+                        <textarea
+                          value={insight.message}
+                          onChange={(e) =>
+                            handleItemChange(
+                              index,
+                              "message",
+                              e.target.value,
+                              "insights"
+                            )
+                          }
+                          placeholder="Share an insight or memory..."
+                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                          rows={3}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <button
                 type="button"
                 onClick={handleAddInsight}
-                className="bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
+                className="w-full bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
               >
                 Add Insight
               </button>
             </div>
 
-            {insights.length > 0 && (
-              <div className="space-y-4">
-                {insights.map((insight, index) => (
-                  <div
-                    key={index}
-                    className="bg-white/5 p-4 rounded-lg border border-gold-primary/50"
-                  >
-                    <div className="flex justify-between items-start mb-4">
-                      <h4 className="text-gold-primary font-bold">
-                        Insight {index + 1}
-                      </h4>
-                      <button
-                        type="button"
-                        onClick={() => removeItem(index, "insights")}
-                        className="text-red-500 hover:text-red-600"
-                      >
-                        Remove
-                      </button>
-                    </div>
-
-                    <div>
-                      <label className="block text-gold-secondary mb-1">
-                        Message
-                      </label>
-                      <textarea
-                        value={insight.message}
-                        onChange={(e) =>
-                          handleItemChange(
-                            index,
-                            "message",
-                            e.target.value,
-                            "insights"
-                          )
-                        }
-                        placeholder="Share an insight or memory..."
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                        rows={3}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Quotes Section */}
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
+            {/* Quotes Section */}
+            <div className="space-y-6">
               <h3 className="text-xl font-bold text-gold-primary">Quotes</h3>
-              <button
-                type="button"
-                onClick={handleAddQuote}
-                className="bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
-              >
-                Add Quote
-              </button>
-            </div>
 
-            {quotes.length > 0 && (
-              <div className="space-y-4">
-                {quotes.map((quote, index) => (
-                  <div
-                    key={index}
-                    className="bg-white/5 p-4 rounded-lg border border-gold-primary/50"
-                  >
-                    <div className="flex justify-between items-start mb-4">
-                      <h4 className="text-gold-primary font-bold">
-                        Quote {index + 1}
-                      </h4>
-                      <button
-                        type="button"
-                        onClick={() => removeItem(index, "quotes")}
-                        className="text-red-500 hover:text-red-600"
-                      >
-                        Remove
-                      </button>
-                    </div>
+              {quotes.length > 0 && (
+                <div className="space-y-4">
+                  {quotes.map((quote, index) => (
+                    <div
+                      key={index}
+                      className="bg-white/5 p-4 rounded-lg border border-gold-primary/50"
+                    >
+                      <div className="flex justify-between items-start mb-4">
+                        <h4 className="text-gold-primary font-bold">
+                          Quote {index + 1}
+                        </h4>
+                        <button
+                          type="button"
+                          onClick={() => removeItem(index, "quotes")}
+                          className="text-red-500 hover:text-red-600"
+                        >
+                          Remove
+                        </button>
+                      </div>
 
-                    <div className="space-y-4">
                       <div>
                         <label className="block text-gold-secondary mb-1">
                           Quote Text
@@ -1561,7 +1417,7 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
                         />
                       </div>
 
-                      <div>
+                      <div className="mt-4">
                         <label className="block text-gold-secondary mb-1">
                           Author (Optional)
                         </label>
@@ -1581,232 +1437,240 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
                         />
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+                  ))}
+                </div>
+              )}
 
-          {/* Memorial Details Section */}
-          {pageType === "MEMORIAL" && (
-            <div className="space-y-6">
-              <h3 className="text-xl font-bold text-gold-primary">
-                Memorial Details
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-gold-primary font-bold">
-                    Funeral Wishes
-                  </label>
-                  <textarea
-                    {...register("funeralWishes")}
-                    rows={3}
-                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                    placeholder="Enter funeral wishes..."
-                  />
-                </div>
-                <div>
-                  <label className="block text-gold-primary font-bold">
-                    Obituary
-                  </label>
-                  <textarea
-                    {...register("obituary")}
-                    rows={3}
-                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                    placeholder="Enter obituary text..."
-                  />
-                </div>
-                <div>
-                  <label className="block text-gold-primary font-bold">
-                    Funeral Home
-                  </label>
-                  <input
-                    {...register("funeralHome")}
-                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                    placeholder="Enter funeral home name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gold-primary font-bold">
-                    Viewing Details
-                  </label>
-                  <textarea
-                    {...register("viewingDetails")}
-                    rows={3}
-                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                    placeholder="Enter viewing details..."
-                  />
-                </div>
-                <div>
-                  <label className="block text-gold-primary font-bold">
-                    Procession Details
-                  </label>
-                  <textarea
-                    {...register("processionDetails")}
-                    rows={3}
-                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                    placeholder="Enter procession details..."
-                  />
-                </div>
-                <div>
-                  <label className="block text-gold-primary font-bold">
-                    Service Details
-                  </label>
-                  <textarea
-                    {...register("serviceDetails")}
-                    rows={3}
-                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                    placeholder="Enter service details..."
-                  />
-                </div>
-                <div>
-                  <label className="block text-gold-primary font-bold">
-                    Wake Details
-                  </label>
-                  <textarea
-                    {...register("wakeDetails")}
-                    rows={3}
-                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                    placeholder="Enter wake details..."
-                  />
-                </div>
-                <div>
-                  <label className="block text-gold-primary font-bold">
-                    Final Resting Place
-                  </label>
-                  <input
-                    {...register("finalRestingPlace")}
-                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                    placeholder="Enter final resting place"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gold-primary font-bold">
-                    Eulogy
-                  </label>
-                  <textarea
-                    {...register("eulogy")}
-                    rows={3}
-                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                    placeholder="Enter eulogy text..."
-                  />
-                </div>
-                <div>
-                  <label className="block text-gold-primary font-bold">
-                    Order of Service
-                  </label>
-                  <input
-                    {...register("orderOfService")}
-                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                    placeholder="Enter order of service"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gold-primary font-bold">
-                    Family Message
-                  </label>
-                  <textarea
-                    {...register("familyMessage")}
-                    rows={3}
-                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                    placeholder="Enter family message..."
-                  />
-                </div>
-                <div>
-                  <label className="block text-gold-primary font-bold">
-                    Memorial Video
-                  </label>
-                  <input
-                    {...register("memorialVideo")}
-                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                    placeholder="Enter memorial video URL"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gold-primary font-bold">
-                    Tributes
-                  </label>
-                  <textarea
-                    {...register("tributes")}
-                    rows={3}
-                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                    placeholder="Enter tributes..."
-                  />
-                </div>
-                <div>
-                  <label className="block text-gold-primary font-bold">
-                    Message from Honouree
-                  </label>
-                  <textarea
-                    {...register("messageFromHonouree")}
-                    rows={3}
-                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                    placeholder="Enter message from honouree..."
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Submit Button */}
-          <div className="space-y-4">
-            {submitMessage && (
-              <div
-                className={`p-4 rounded-md ${
-                  submitMessage.type === "success"
-                    ? "bg-green-100 border border-green-400 text-green-700"
-                    : "bg-red-100 border border-red-400 text-red-700"
-                }`}
-              >
-                {submitMessage.message}
-              </div>
-            )}
-            <div className="relative w-full">
               <button
-                type="submit"
-                disabled={
-                  (pageType === "MEMORIAL" && !isNextOfKin) || isSubmitting
-                }
-                className={`relative w-full py-4 px-16 text-base font-medium text-purple-primary transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100`}
+                type="button"
+                onClick={handleAddQuote}
+                className="w-full bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
               >
-                <div className="absolute inset-0">
-                  <Image
-                    src="/images/button.png"
-                    alt=""
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-                <span className="relative z-10 flex items-center justify-center space-x-2">
-                  {isSubmitting ? (
-                    <>
-                      <svg
-                        className="animate-spin h-5 w-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      <span>Updating...</span>
-                    </>
-                  ) : (
-                    "Update Page"
-                  )}
-                </span>
+                Add Quote
               </button>
+            </div>
+
+            {/* Memorial Details Section */}
+            {pageType === "MEMORIAL" && (
+              <div className="space-y-6">
+                <h3 className="text-xl font-bold text-gold-primary">
+                  Memorial Details
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-gold-primary font-bold">
+                      Funeral Wishes
+                    </label>
+                    <textarea
+                      {...register("funeralWishes")}
+                      rows={3}
+                      className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                      placeholder="Enter funeral wishes..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gold-primary font-bold">
+                      Obituary
+                    </label>
+                    <textarea
+                      {...register("obituary")}
+                      rows={3}
+                      className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                      placeholder="Enter obituary text..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gold-primary font-bold">
+                      Funeral Home
+                    </label>
+                    <input
+                      {...register("funeralHome")}
+                      className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                      placeholder="Enter funeral home name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gold-primary font-bold">
+                      Viewing Details
+                    </label>
+                    <textarea
+                      {...register("viewingDetails")}
+                      rows={3}
+                      className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                      placeholder="Enter viewing details..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gold-primary font-bold">
+                      Procession Details
+                    </label>
+                    <textarea
+                      {...register("processionDetails")}
+                      rows={3}
+                      className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                      placeholder="Enter procession details..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gold-primary font-bold">
+                      Service Details
+                    </label>
+                    <textarea
+                      {...register("serviceDetails")}
+                      rows={3}
+                      className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                      placeholder="Enter service details..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gold-primary font-bold">
+                      Wake Details
+                    </label>
+                    <textarea
+                      {...register("wakeDetails")}
+                      rows={3}
+                      className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                      placeholder="Enter wake details..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gold-primary font-bold">
+                      Final Resting Place
+                    </label>
+                    <input
+                      {...register("finalRestingPlace")}
+                      className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                      placeholder="Enter final resting place"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gold-primary font-bold">
+                      Eulogy
+                    </label>
+                    <textarea
+                      {...register("eulogy")}
+                      rows={3}
+                      className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                      placeholder="Enter eulogy text..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gold-primary font-bold">
+                      Order of Service
+                    </label>
+                    <input
+                      {...register("orderOfService")}
+                      className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                      placeholder="Enter order of service"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gold-primary font-bold">
+                      Family Message
+                    </label>
+                    <textarea
+                      {...register("familyMessage")}
+                      rows={3}
+                      className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                      placeholder="Enter family message..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gold-primary font-bold">
+                      Memorial Video
+                    </label>
+                    <input
+                      {...register("memorialVideo")}
+                      className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                      placeholder="Enter memorial video URL"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gold-primary font-bold">
+                      Tributes
+                    </label>
+                    <textarea
+                      {...register("tributes")}
+                      rows={3}
+                      className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                      placeholder="Enter tributes..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gold-primary font-bold">
+                      Message from Honouree
+                    </label>
+                    <textarea
+                      {...register("messageFromHonouree")}
+                      rows={3}
+                      className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                      placeholder="Enter message from honouree..."
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <div className="space-y-4">
+              {submitMessage && (
+                <div
+                  className={`p-4 rounded-md ${
+                    submitMessage.type === "success"
+                      ? "bg-green-100 border border-green-400 text-green-700"
+                      : "bg-red-100 border border-red-400 text-red-700"
+                  }`}
+                >
+                  {submitMessage.message}
+                </div>
+              )}
+              <div className="relative w-full">
+                <button
+                  type="submit"
+                  disabled={
+                    (pageType === "MEMORIAL" && !isNextOfKin) || isSubmitting
+                  }
+                  className={`relative w-full py-4 px-16 text-base font-medium text-purple-primary transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100`}
+                >
+                  <div className="absolute inset-0">
+                    <Image
+                      src="/images/button.png"
+                      alt=""
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <span className="relative z-10 flex items-center justify-center space-x-2">
+                    {isSubmitting ? (
+                      <>
+                        <svg
+                          className="animate-spin h-5 w-5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        <span>Updating...</span>
+                      </>
+                    ) : (
+                      "Update Page"
+                    )}
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         </form>

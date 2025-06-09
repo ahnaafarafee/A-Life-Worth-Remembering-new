@@ -1279,18 +1279,9 @@ export default function CreateLegacyPage() {
 
               {/* Relationships Section */}
               <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-xl font-bold text-gold-primary">
-                    Relationships
-                  </h3>
-                  <button
-                    type="button"
-                    onClick={handleAddRelationship}
-                    className="bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
-                  >
-                    Add Relationship
-                  </button>
-                </div>
+                <h3 className="text-xl font-bold text-gold-primary">
+                  Relationships
+                </h3>
 
                 {relationships.length > 0 && (
                   <div className="space-y-4">
@@ -1312,72 +1303,67 @@ export default function CreateLegacyPage() {
                           </button>
                         </div>
 
-                        <div className="space-y-4">
-                          <div>
-                            <label className="block text-gold-secondary mb-1">
-                              Relationship Type
-                            </label>
-                            <select
-                              value={relationship.type}
-                              onChange={(e) =>
-                                handleItemChange(
-                                  index,
-                                  "type",
-                                  e.target.value,
-                                  "relationships"
-                                )
-                              }
-                              className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                            >
-                              <option value="">Select relationship type</option>
-                              {relationshipTypes.map((type) => (
-                                <option key={type} value={type}>
-                                  {type}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            Relationship Type
+                          </label>
+                          <select
+                            value={relationship.type}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "type",
+                                e.target.value,
+                                "relationships"
+                              )
+                            }
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                          >
+                            <option value="">Select relationship type</option>
+                            {relationshipTypes.map((type) => (
+                              <option key={type} value={type}>
+                                {type}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
 
-                          <div>
-                            <label className="block text-gold-secondary mb-1">
-                              Name
-                            </label>
-                            <input
-                              type="text"
-                              value={relationship.name}
-                              onChange={(e) =>
-                                handleItemChange(
-                                  index,
-                                  "name",
-                                  e.target.value,
-                                  "relationships"
-                                )
-                              }
-                              placeholder="Name of the person"
-                              className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                            />
-                          </div>
+                        <div className="mt-4">
+                          <label className="block text-gold-secondary mb-1">
+                            Name
+                          </label>
+                          <input
+                            type="text"
+                            value={relationship.name}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "name",
+                                e.target.value,
+                                "relationships"
+                              )
+                            }
+                            placeholder="Name of the person"
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                          />
                         </div>
                       </div>
                     ))}
                   </div>
                 )}
+
+                <button
+                  type="button"
+                  onClick={handleAddRelationship}
+                  className="w-full bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
+                >
+                  Add Relationship
+                </button>
               </div>
 
               {/* Insights Section */}
               <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-xl font-bold text-gold-primary">
-                    Insights
-                  </h3>
-                  <button
-                    type="button"
-                    onClick={handleAddInsight}
-                    className="bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
-                  >
-                    Add Insight
-                  </button>
-                </div>
+                <h3 className="text-xl font-bold text-gold-primary">Insights</h3>
 
                 {insights.length > 0 && (
                   <div className="space-y-4">
@@ -1422,22 +1408,19 @@ export default function CreateLegacyPage() {
                     ))}
                   </div>
                 )}
+
+                <button
+                  type="button"
+                  onClick={handleAddInsight}
+                  className="w-full bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
+                >
+                  Add Insight
+                </button>
               </div>
 
               {/* Quotes Section */}
               <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-xl font-bold text-gold-primary">
-                    Quotes
-                  </h3>
-                  <button
-                    type="button"
-                    onClick={handleAddQuote}
-                    className="bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
-                  >
-                    Add Quote
-                  </button>
-                </div>
+                <h3 className="text-xl font-bold text-gold-primary">Quotes</h3>
 
                 {quotes.length > 0 && (
                   <div className="space-y-4">
@@ -1459,273 +1442,57 @@ export default function CreateLegacyPage() {
                           </button>
                         </div>
 
-                        <div className="space-y-4">
-                          <div>
-                            <label className="block text-gold-secondary mb-1">
-                              Quote Text
-                            </label>
-                            <textarea
-                              value={quote.text}
-                              onChange={(e) =>
-                                handleItemChange(
-                                  index,
-                                  "text",
-                                  e.target.value,
-                                  "quotes"
-                                )
-                              }
-                              placeholder="Enter the quote..."
-                              className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                              rows={3}
-                            />
-                          </div>
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            Quote Text
+                          </label>
+                          <textarea
+                            value={quote.text}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "text",
+                                e.target.value,
+                                "quotes"
+                              )
+                            }
+                            placeholder="Enter the quote..."
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                            rows={3}
+                          />
+                        </div>
 
-                          <div>
-                            <label className="block text-gold-secondary mb-1">
-                              Author (Optional)
-                            </label>
-                            <input
-                              type="text"
-                              value={quote.author}
-                              onChange={(e) =>
-                                handleItemChange(
-                                  index,
-                                  "author",
-                                  e.target.value,
-                                  "quotes"
-                                )
-                              }
-                              placeholder="Who said this quote?"
-                              className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
-                            />
-                          </div>
+                        <div className="mt-4">
+                          <label className="block text-gold-secondary mb-1">
+                            Author (Optional)
+                          </label>
+                          <input
+                            type="text"
+                            value={quote.author}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "author",
+                                e.target.value,
+                                "quotes"
+                              )
+                            }
+                            placeholder="Who said this quote?"
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
+                          />
                         </div>
                       </div>
                     ))}
                   </div>
                 )}
-              </div>
 
-              {/* Memorial Details Section */}
-              {pageType === "MEMORIAL" && (
-                <div className="space-y-6">
-                  <h3 className="text-xl font-bold text-gold-primary">
-                    Memorial Details
-                  </h3>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Funeral Wishes
-                      </label>
-                      <textarea
-                        {...register("funeralWishes")}
-                        rows={3}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Enter funeral wishes..."
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Obituary
-                      </label>
-                      <textarea
-                        {...register("obituary")}
-                        rows={3}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Enter obituary text..."
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Funeral Home
-                      </label>
-                      <input
-                        {...register("funeralHome")}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Enter funeral home name"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Viewing Details
-                      </label>
-                      <textarea
-                        {...register("viewingDetails")}
-                        rows={3}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Enter viewing details..."
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Procession Details
-                      </label>
-                      <textarea
-                        {...register("processionDetails")}
-                        rows={3}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Enter procession details..."
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Service Details
-                      </label>
-                      <textarea
-                        {...register("serviceDetails")}
-                        rows={3}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Enter service details..."
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Wake Details
-                      </label>
-                      <textarea
-                        {...register("wakeDetails")}
-                        rows={3}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Enter wake details..."
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Final Resting Place
-                      </label>
-                      <input
-                        {...register("finalRestingPlace")}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Enter final resting place"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Eulogy
-                      </label>
-                      <textarea
-                        {...register("eulogy")}
-                        rows={3}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Enter eulogy text..."
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Order of Service
-                      </label>
-                      <input
-                        {...register("orderOfService")}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Enter order of service"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Family Message
-                      </label>
-                      <textarea
-                        {...register("familyMessage")}
-                        rows={3}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Enter family message..."
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Memorial Video
-                      </label>
-                      <input
-                        {...register("memorialVideo")}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Enter memorial video URL"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Tributes
-                      </label>
-                      <textarea
-                        {...register("tributes")}
-                        rows={3}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Enter tributes..."
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Message from Honouree
-                      </label>
-                      <textarea
-                        {...register("messageFromHonouree")}
-                        rows={3}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Enter message from honouree..."
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Submit Button */}
-              <div className="space-y-4">
-                {submitMessage && (
-                  <div
-                    className={`p-4 rounded-md ${
-                      submitMessage.type === "success"
-                        ? "bg-green-100 border border-green-400 text-green-700"
-                        : "bg-red-100 border border-red-400 text-red-700"
-                    }`}
-                  >
-                    {submitMessage.message}
-                  </div>
-                )}
-                <div className="relative w-full">
-                  <button
-                    type="submit"
-                    disabled={
-                      (pageType === "MEMORIAL" && !isNextOfKin) || isSubmitting
-                    }
-                    className={`relative w-full py-4 px-16 text-base font-medium text-purple-primary transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100`}
-                  >
-                    <div className="absolute inset-0">
-                      <Image
-                        src="/images/button.png"
-                        alt=""
-                        fill
-                        className="object-contain"
-                      />
-                    </div>
-                    <span className="relative z-10 flex items-center justify-center space-x-2">
-                      {isSubmitting ? (
-                        <>
-                          <svg
-                            className="animate-spin h-5 w-5"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                          </svg>
-                          <span>Creating...</span>
-                        </>
-                      ) : (
-                        "Create Page"
-                      )}
-                    </span>
-                  </button>
+                <button
+                  type="button"
+                  onClick={handleAddQuote}
+                  className="w-full bg-gold-primary/20 hover:bg-gold-primary/30 text-gold-primary border border-gold-primary rounded-md px-4 py-2 transition-colors"
+                >
+                  Add Quote
+                </button>
                 </div>
               </div>
             </form>
