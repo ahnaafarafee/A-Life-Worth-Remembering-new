@@ -392,6 +392,46 @@ export async function PUT(
           deleteMany: {},
           create: quotes,
         },
+        memorialDetails: {
+          upsert: {
+            create: {
+              funeralWishes: formData.get("funeralWishes") as string,
+              obituary: formData.get("obituary") as string,
+              funeralHome: formData.get("funeralHome") as string,
+              viewingDetails: formData.get("viewingDetails") as string,
+              processionDetails: formData.get("processionDetails") as string,
+              serviceDetails: formData.get("serviceDetails") as string,
+              wakeDetails: formData.get("wakeDetails") as string,
+              finalRestingPlace: formData.get("finalRestingPlace") as string,
+              eulogy: formData.get("eulogy") as string,
+              orderOfService: formData.get("orderOfService") as string,
+              familyMessage: formData.get("familyMessage") as string,
+              memorialVideo: formData.get("memorialVideo") as string,
+              tributes: formData.get("tributes") as string,
+              messageFromHonouree: formData.get(
+                "messageFromHonouree"
+              ) as string,
+            },
+            update: {
+              funeralWishes: formData.get("funeralWishes") as string,
+              obituary: formData.get("obituary") as string,
+              funeralHome: formData.get("funeralHome") as string,
+              viewingDetails: formData.get("viewingDetails") as string,
+              processionDetails: formData.get("processionDetails") as string,
+              serviceDetails: formData.get("serviceDetails") as string,
+              wakeDetails: formData.get("wakeDetails") as string,
+              finalRestingPlace: formData.get("finalRestingPlace") as string,
+              eulogy: formData.get("eulogy") as string,
+              orderOfService: formData.get("orderOfService") as string,
+              familyMessage: formData.get("familyMessage") as string,
+              memorialVideo: formData.get("memorialVideo") as string,
+              tributes: formData.get("tributes") as string,
+              messageFromHonouree: formData.get(
+                "messageFromHonouree"
+              ) as string,
+            },
+          },
+        },
       },
     });
 

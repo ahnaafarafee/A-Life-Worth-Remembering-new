@@ -923,37 +923,167 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
             {/* Memorial Details */}
             {page.pageType === "MEMORIAL" && page.memorialDetails && (
               <div className="mb-12">
-                <h2 className="text-2xl font-bold text-gold-primary mb-6">
+                <h2 className="text-2xl font-bold text-gold-primary mb-6 legacy-heading">
                   Memorial Details
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {Object.entries(page.memorialDetails).map(([key, value]) => {
-                    if (!value) return null;
-                    const title = key
-                      .replace(/([A-Z])/g, " $1")
-                      .replace(/^./, (str) => str.toUpperCase());
-                    return (
-                      <div
-                        key={key}
-                        className="bg-white/50 p-6 rounded-lg border border-gold-primary/20 hover:border-gold-primary/40 transition-colors"
-                      >
-                        <h3 className="text-xl font-bold text-gold-secondary mb-2">
-                          {title}
-                        </h3>
-                        {key === "memorialVideo" ? (
-                          <div className="aspect-video">
-                            <iframe
-                              src={value}
-                              className="w-full h-full rounded-lg"
-                              allowFullScreen
-                            />
-                          </div>
-                        ) : (
-                          <p className="text-gray-700">{value}</p>
-                        )}
+                <div className="space-y-6">
+                  {page.memorialDetails.funeralWishes && (
+                    <div className="bg-white/50 p-6 rounded-lg border border-gold-primary/20 hover:border-gold-primary/40 transition-colors">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
+                        Funeral Wishes
+                      </h3>
+                      <p className="text-gray-700 legacy-body">
+                        {page.memorialDetails.funeralWishes}
+                      </p>
+                    </div>
+                  )}
+
+                  {page.memorialDetails.obituary && (
+                    <div className="bg-white/50 p-6 rounded-lg border border-gold-primary/20 hover:border-gold-primary/40 transition-colors">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
+                        Obituary
+                      </h3>
+                      <p className="text-gray-700 legacy-body">
+                        {page.memorialDetails.obituary}
+                      </p>
+                    </div>
+                  )}
+
+                  {page.memorialDetails.funeralHome && (
+                    <div className="bg-white/50 p-6 rounded-lg border border-gold-primary/20 hover:border-gold-primary/40 transition-colors">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
+                        Funeral Home
+                      </h3>
+                      <p className="text-gray-700 legacy-body">
+                        {page.memorialDetails.funeralHome}
+                      </p>
+                    </div>
+                  )}
+
+                  {page.memorialDetails.viewingDetails && (
+                    <div className="bg-white/50 p-6 rounded-lg border border-gold-primary/20 hover:border-gold-primary/40 transition-colors">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
+                        Viewing Details
+                      </h3>
+                      <p className="text-gray-700 legacy-body">
+                        {page.memorialDetails.viewingDetails}
+                      </p>
+                    </div>
+                  )}
+
+                  {page.memorialDetails.processionDetails && (
+                    <div className="bg-white/50 p-6 rounded-lg border border-gold-primary/20 hover:border-gold-primary/40 transition-colors">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
+                        Procession Details
+                      </h3>
+                      <p className="text-gray-700 legacy-body">
+                        {page.memorialDetails.processionDetails}
+                      </p>
+                    </div>
+                  )}
+
+                  {page.memorialDetails.serviceDetails && (
+                    <div className="bg-white/50 p-6 rounded-lg border border-gold-primary/20 hover:border-gold-primary/40 transition-colors">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
+                        Service Details
+                      </h3>
+                      <p className="text-gray-700 legacy-body">
+                        {page.memorialDetails.serviceDetails}
+                      </p>
+                    </div>
+                  )}
+
+                  {page.memorialDetails.wakeDetails && (
+                    <div className="bg-white/50 p-6 rounded-lg border border-gold-primary/20 hover:border-gold-primary/40 transition-colors">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
+                        Wake Details
+                      </h3>
+                      <p className="text-gray-700 legacy-body">
+                        {page.memorialDetails.wakeDetails}
+                      </p>
+                    </div>
+                  )}
+
+                  {page.memorialDetails.finalRestingPlace && (
+                    <div className="bg-white/50 p-6 rounded-lg border border-gold-primary/20 hover:border-gold-primary/40 transition-colors">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
+                        Final Resting Place
+                      </h3>
+                      <p className="text-gray-700 legacy-body">
+                        {page.memorialDetails.finalRestingPlace}
+                      </p>
+                    </div>
+                  )}
+
+                  {page.memorialDetails.eulogy && (
+                    <div className="bg-white/50 p-6 rounded-lg border border-gold-primary/20 hover:border-gold-primary/40 transition-colors">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
+                        Eulogy
+                      </h3>
+                      <p className="text-gray-700 legacy-body">
+                        {page.memorialDetails.eulogy}
+                      </p>
+                    </div>
+                  )}
+
+                  {page.memorialDetails.orderOfService && (
+                    <div className="bg-white/50 p-6 rounded-lg border border-gold-primary/20 hover:border-gold-primary/40 transition-colors">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
+                        Order of Service
+                      </h3>
+                      <p className="text-gray-700 legacy-body">
+                        {page.memorialDetails.orderOfService}
+                      </p>
+                    </div>
+                  )}
+
+                  {page.memorialDetails.familyMessage && (
+                    <div className="bg-white/50 p-6 rounded-lg border border-gold-primary/20 hover:border-gold-primary/40 transition-colors">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
+                        Message from Family
+                      </h3>
+                      <p className="text-gray-700 legacy-body">
+                        {page.memorialDetails.familyMessage}
+                      </p>
+                    </div>
+                  )}
+
+                  {page.memorialDetails.memorialVideo && (
+                    <div className="bg-white/50 p-6 rounded-lg border border-gold-primary/20 hover:border-gold-primary/40 transition-colors">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
+                        Memorial Video
+                      </h3>
+                      <div className="aspect-video">
+                        <iframe
+                          src={page.memorialDetails.memorialVideo}
+                          className="w-full h-full rounded-lg"
+                          allowFullScreen
+                        />
                       </div>
-                    );
-                  })}
+                    </div>
+                  )}
+
+                  {page.memorialDetails.tributes && (
+                    <div className="bg-white/50 p-6 rounded-lg border border-gold-primary/20 hover:border-gold-primary/40 transition-colors">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
+                        Tributes
+                      </h3>
+                      <p className="text-gray-700 legacy-body">
+                        {page.memorialDetails.tributes}
+                      </p>
+                    </div>
+                  )}
+
+                  {page.memorialDetails.messageFromHonouree && (
+                    <div className="bg-white/50 p-6 rounded-lg border border-gold-primary/20 hover:border-gold-primary/40 transition-colors">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
+                        Message from {page.honoureeName}
+                      </h3>
+                      <p className="text-gray-700 legacy-body">
+                        {page.memorialDetails.messageFromHonouree}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

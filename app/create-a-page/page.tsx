@@ -984,7 +984,6 @@ export default function CreateLegacyPage() {
 
                   {/* Video URL Section */}
                   <div className="space-y-6">
-                  
                     <div>
                       <label className="block text-gold-primary font-bold">
                         Introduction Video
@@ -1063,6 +1062,167 @@ export default function CreateLegacyPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Memorial Details Section */}
+                {pageType === "MEMORIAL" && (
+                  <div className="space-y-6">
+                    <h3 className="text-xl font-bold text-gold-primary">
+                      Memorial Details
+                    </h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-gold-primary font-bold">
+                          Funeral Wishes
+                        </label>
+                        <textarea
+                          {...register("funeralWishes")}
+                          rows={3}
+                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                          placeholder="Enter funeral wishes..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gold-primary font-bold">
+                          Obituary
+                        </label>
+                        <textarea
+                          {...register("obituary")}
+                          rows={3}
+                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                          placeholder="Enter obituary text..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gold-primary font-bold">
+                          Funeral Home
+                        </label>
+                        <input
+                          {...register("funeralHome")}
+                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                          placeholder="Enter funeral home name"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gold-primary font-bold">
+                          Viewing Details
+                        </label>
+                        <textarea
+                          {...register("viewingDetails")}
+                          rows={3}
+                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                          placeholder="Enter viewing details..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gold-primary font-bold">
+                          Procession Details
+                        </label>
+                        <textarea
+                          {...register("processionDetails")}
+                          rows={3}
+                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                          placeholder="Enter procession details..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gold-primary font-bold">
+                          Service Details
+                        </label>
+                        <textarea
+                          {...register("serviceDetails")}
+                          rows={3}
+                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                          placeholder="Enter service details..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gold-primary font-bold">
+                          Wake Details
+                        </label>
+                        <textarea
+                          {...register("wakeDetails")}
+                          rows={3}
+                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                          placeholder="Enter wake details..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gold-primary font-bold">
+                          Final Resting Place
+                        </label>
+                        <input
+                          {...register("finalRestingPlace")}
+                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                          placeholder="Enter final resting place"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gold-primary font-bold">
+                          Eulogy
+                        </label>
+                        <textarea
+                          {...register("eulogy")}
+                          rows={3}
+                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                          placeholder="Enter eulogy text..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gold-primary font-bold">
+                          Order of Service
+                        </label>
+                        <input
+                          {...register("orderOfService")}
+                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                          placeholder="Enter order of service"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gold-primary font-bold">
+                          Family Message
+                        </label>
+                        <textarea
+                          {...register("familyMessage")}
+                          rows={3}
+                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                          placeholder="Enter family message..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gold-primary font-bold">
+                          Memorial Video
+                        </label>
+                        <input
+                          {...register("memorialVideo")}
+                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                          placeholder="Enter memorial video URL"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gold-primary font-bold">
+                          Tributes
+                        </label>
+                        <textarea
+                          {...register("tributes")}
+                          rows={3}
+                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                          placeholder="Enter tributes..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gold-primary font-bold">
+                          Message from Honouree
+                        </label>
+                        <textarea
+                          {...register("messageFromHonouree")}
+                          rows={3}
+                          className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                          placeholder="Enter message from honouree..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Gallery Section */}
                 <div className="space-y-6">
