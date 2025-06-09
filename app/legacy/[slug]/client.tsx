@@ -23,6 +23,9 @@ interface LegacyPage {
   personality: string | null;
   values: string | null;
   beliefs: string | null;
+  headingFont: string;
+  bodyFont: string;
+  accentFont: string;
   mediaItems: {
     type: "IMAGE" | "VIDEO" | "AUDIO";
     url: string;
@@ -237,16 +240,46 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
   return (
     <div
       className="min-h-screen w-full py-8 px-4 md:px-8 lg:px-12"
-      style={{
-        backgroundImage: "url('/images/background-default-legacy.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-        backgroundRepeat: "no-repeat",
-        width: "100vw",
-        maxWidth: "100%",
-      }}
+      style={
+        {
+          backgroundImage: "url('/images/background-default-legacy.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          backgroundRepeat: "no-repeat",
+          width: "100vw",
+          maxWidth: "100%",
+          "--heading-font": page.headingFont,
+          "--body-font": page.bodyFont,
+          "--accent-font": page.accentFont,
+        } as React.CSSProperties
+      }
     >
+      <style jsx global>{`
+        .legacy-heading {
+          font-family: var(--heading-font), serif;
+        }
+        .legacy-body {
+          font-family: var(--body-font), serif;
+        }
+        .legacy-accent {
+          font-family: var(--accent-font), serif;
+        }
+
+        @keyframes marquee {
+          0% {
+            transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+
+        .animate-marquee {
+          animation: marquee 40s linear infinite;
+        }
+      `}</style>
+
       <div className="container mx-auto max-w-7xl bg-white rounded-lg border-4 border-gold-primary shadow-2xl overflow-hidden">
         <Navbar />
 
@@ -316,23 +349,23 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
                 />
               </div>
             )}
-            <h1 className="text-2xl md:text-3xl font-bold mb-4">
+            <h1 className="text-2xl md:text-3xl font-bold mb-4 legacy-heading">
               Celebrating the life of
             </h1>
-            <h1 className="text-4xl md:text-5xl font-bold text-gold-primary mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-gold-primary mb-4 legacy-heading">
               {page.honoureeName}
             </h1>
-            <p className="text-xl text-gold-secondary mb-2">
+            <p className="text-xl text-gold-secondary mb-2 legacy-body">
               {new Date(page.dateOfBirth).toDateString()} -{" "}
               {page.dateOfPassing
                 ? new Date(page.dateOfPassing).toDateString()
                 : "Present"}
             </p>
-            <p className="text-lg text-gold-secondary mb-2">
+            <p className="text-lg text-gold-secondary mb-2 legacy-body">
               {page.pageType.charAt(0) + page.pageType.slice(1).toLowerCase()}{" "}
               Page
             </p>
-            <p className="text-lg text-gold-secondary mb-4">
+            <p className="text-lg text-gold-secondary mb-4 legacy-body">
               Created by {page.creatorName}
             </p>
 
@@ -450,21 +483,6 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
                   ))}
                 </div>
               </div>
-
-              <style jsx>{`
-                @keyframes marquee {
-                  0% {
-                    transform: translateX(0%);
-                  }
-                  100% {
-                    transform: translateX(-50%);
-                  }
-                }
-
-                .animate-marquee {
-                  animation: marquee 40s linear infinite;
-                }
-              `}</style>
             </div>
           )}
 
@@ -472,10 +490,10 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
           <div className="px-8 pb-8 mt-4">
             {/* Story */}
             <div className="mb-12">
-              <h2 className="text-2xl font-bold text-gold-primary mb-4">
+              <h2 className="text-2xl font-bold text-gold-primary mb-4 legacy-heading">
                 {page.storyName}
               </h2>
-              <div className="prose max-w-none text-gray-700 bg-white/50 p-6 rounded-lg">
+              <div className="prose max-w-none text-gray-700 bg-white/50 p-6 rounded-lg legacy-body">
                 {page.story}
               </div>
             </div>
@@ -483,32 +501,36 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
             {/* General Knowledge */}
             {(page.personality || page.values || page.beliefs) && (
               <div className="mb-12">
-                <h2 className="text-2xl font-bold text-gold-primary mb-6">
+                <h2 className="text-2xl font-bold text-gold-primary mb-6 legacy-heading">
                   General Knowledge
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {page.personality && (
                     <div className="bg-white/50 p-6 rounded-lg">
-                      <h3 className="text-xl font-bold text-gold-secondary mb-2">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
                         Personality
                       </h3>
-                      <p className="text-gray-700">{page.personality}</p>
+                      <p className="text-gray-700 legacy-body">
+                        {page.personality}
+                      </p>
                     </div>
                   )}
                   {page.values && (
                     <div className="bg-white/50 p-6 rounded-lg">
-                      <h3 className="text-xl font-bold text-gold-secondary mb-2">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
                         Values
                       </h3>
-                      <p className="text-gray-700">{page.values}</p>
+                      <p className="text-gray-700 legacy-body">{page.values}</p>
                     </div>
                   )}
                   {page.beliefs && (
                     <div className="bg-white/50 p-6 rounded-lg">
-                      <h3 className="text-xl font-bold text-gold-secondary mb-2">
+                      <h3 className="text-xl font-bold text-gold-secondary mb-2 legacy-heading">
                         Beliefs
                       </h3>
-                      <p className="text-gray-700">{page.beliefs}</p>
+                      <p className="text-gray-700 legacy-body">
+                        {page.beliefs}
+                      </p>
                     </div>
                   )}
                 </div>

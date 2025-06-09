@@ -212,6 +212,15 @@ export async function POST(req: NextRequest) {
         story: formData.get("story") as string,
         honoureePhoto: honoureePhotoPath,
         coverPhoto: coverPhotoPath,
+        ...(formData.get("headingFont") && {
+          headingFont: formData.get("headingFont") as string,
+        }),
+        ...(formData.get("bodyFont") && {
+          bodyFont: formData.get("bodyFont") as string,
+        }),
+        ...(formData.get("accentFont") && {
+          accentFont: formData.get("accentFont") as string,
+        }),
         generalKnowledge: {
           create: {
             personality: formData.get("personality") as string,

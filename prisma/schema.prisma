@@ -70,6 +70,10 @@ model LegacyPage {
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   hasTransitioned  Boolean           @default(false)
+  // Font fields with defaults
+  headingFont      String?           @default("Playfair Display")
+  bodyFont         String?           @default("Lora")
+  accentFont       String?           @default("Cormorant Garamond")
 
   @@index([userId])
   @@index([slug])

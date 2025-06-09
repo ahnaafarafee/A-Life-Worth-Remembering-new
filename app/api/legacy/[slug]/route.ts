@@ -341,14 +341,15 @@ export async function PUT(
       data: {
         honoureePhoto: honoureePhotoPath,
         coverPhoto: coverPhotoPath,
-        // photos: {
-        //   deleteMany: {},
-        //   create: photos,
-        // },
-        // soundClips: {
-        //   deleteMany: {},
-        //   create: soundClips,
-        // },
+        ...(formData.get("headingFont") && {
+          headingFont: formData.get("headingFont") as string,
+        }),
+        ...(formData.get("bodyFont") && {
+          bodyFont: formData.get("bodyFont") as string,
+        }),
+        ...(formData.get("accentFont") && {
+          accentFont: formData.get("accentFont") as string,
+        }),
         mediaItems: {
           deleteMany: {},
           create: [...photos, ...soundClips],

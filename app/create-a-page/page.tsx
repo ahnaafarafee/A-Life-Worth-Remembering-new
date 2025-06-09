@@ -36,6 +36,10 @@ const formSchema = z.object({
   coverPhoto: z.string().optional(),
   honoureePhoto: z.string().optional(),
   isNextOfKin: z.boolean().optional(),
+  // Font selections
+  headingFont: z.string().default("Playfair Display"),
+  bodyFont: z.string().default("Lora"),
+  accentFont: z.string().default("Cormorant Garamond"),
 
   // General Knowledge
   personality: z.string().optional(),
@@ -160,6 +164,20 @@ export default function CreateLegacyPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [quotes, setQuotes] = useState<FormData["quotes"]>([]);
 
+  // Font options
+  const fontOptions = [
+    { value: "Playfair Display", label: "Playfair Display" },
+    { value: "Lora", label: "Lora" },
+    { value: "Cormorant Garamond", label: "Cormorant Garamond" },
+    { value: "Merriweather", label: "Merriweather" },
+    { value: "Libre Baskerville", label: "Libre Baskerville" },
+    { value: "Crimson Text", label: "Crimson Text" },
+    { value: "Source Serif Pro", label: "Source Serif Pro" },
+    { value: "PT Serif", label: "PT Serif" },
+    { value: "Noto Serif", label: "Noto Serif" },
+    { value: "EB Garamond", label: "EB Garamond" },
+  ];
+
   const relationshipTypes = [
     "Child of",
     "Daughter of",
@@ -177,13 +195,20 @@ export default function CreateLegacyPage() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       hasTransitioned: false,
       storyName: "Story",
+      pageType: PageType.MEMORIAL,
     },
   });
+
+  // Update pageType in form when it changes
+  useEffect(() => {
+    setValue("pageType", pageType);
+  }, [pageType, setValue]);
 
   useEffect(() => {
     const checkExistingPage = async () => {
@@ -275,6 +300,9 @@ export default function CreateLegacyPage() {
           }
         }
       });
+
+      // Ensure pageType is included
+      formData.append("pageType", pageType);
 
       // Add media files
       if (honoureePhotoPreview) {
@@ -566,38 +594,117 @@ export default function CreateLegacyPage() {
                 onSubmit={handleSubmit(onSubmit)}
                 className="max-w-4xl mx-auto space-y-8 bg-white/10 backdrop-blur-lg rounded-lg p-8 shadow-gold"
               >
+                {/* Page Type Selection */}
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold text-gold-primary mb-4">
+                    Page Type
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {Object.values(PageType).map((type) => (
+                      <button
+                        key={type}
+                        type="button"
+                        onClick={() => setPageType(type)}
+                        className={`p-4 rounded-lg border-2 transition-colors ${
+                          pageType === type
+                            ? "border-gold-primary bg-gold-primary/10"
+                            : "border-gold-primary/30 hover:border-gold-primary/50"
+                        }`}
+                      >
+                        <h4 className="font-bold text-gold-primary mb-2">
+                          {type.charAt(0) + type.slice(1).toLowerCase()}
+                        </h4>
+                        <p className="text-sm text-gold-secondary">
+                          {type === PageType.MEMORIAL
+                            ? "Honor and remember a loved one who has passed"
+                            : type === PageType.BIOGRAPHY
+                            ? "Share someone's life story and achievements"
+                            : "Tell your own life story and experiences"}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Typography Section */}
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold text-gold-primary mb-4">
+                    Typography
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                      <label className="block text-gold-primary font-bold mb-2">
+                        Heading Font
+                      </label>
+                      <select
+                        {...register("headingFont")}
+                        className="w-full bg-white border border-gold-primary/50 text-gray-900 rounded-md p-3 focus:border-gold-primary focus:ring-1 focus:ring-gold-primary"
+                        style={{ fontFamily: "var(--heading-font)" }}
+                      >
+                        {fontOptions.map((font) => (
+                          <option
+                            key={font.value}
+                            value={font.value}
+                            style={{ fontFamily: font.value }}
+                          >
+                            {font.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-gold-primary font-bold mb-2">
+                        Body Font
+                      </label>
+                      <select
+                        {...register("bodyFont")}
+                        className="w-full bg-white border border-gold-primary/50 text-gray-900 rounded-md p-3 focus:border-gold-primary focus:ring-1 focus:ring-gold-primary"
+                        style={{ fontFamily: "var(--body-font)" }}
+                      >
+                        {fontOptions.map((font) => (
+                          <option
+                            key={font.value}
+                            value={font.value}
+                            style={{ fontFamily: font.value }}
+                          >
+                            {font.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-gold-primary font-bold mb-2">
+                        Accent Font
+                      </label>
+                      <select
+                        {...register("accentFont")}
+                        className="w-full bg-white border border-gold-primary/50 text-gray-900 rounded-md p-3 focus:border-gold-primary focus:ring-1 focus:ring-gold-primary"
+                        style={{ fontFamily: "var(--accent-font)" }}
+                      >
+                        {fontOptions.map((font) => (
+                          <option
+                            key={font.value}
+                            value={font.value}
+                            style={{ fontFamily: font.value }}
+                          >
+                            {font.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <p className="mt-4 text-sm text-gold-secondary">
+                    These fonts will be used throughout your legacy page. Choose
+                    fonts that reflect the personality and style you want to
+                    convey.
+                  </p>
+                </div>
+
                 {/* Basic Information Section */}
                 <div className="space-y-6">
                   <h3 className="text-xl font-bold text-gold-primary">
                     Basic Information
                   </h3>
-
-                  {/* Page Type Selection */}
-                  <div className="space-y-4">
-                    <label className="block text-gold-primary font-bold">
-                      Page Type
-                    </label>
-                    <select
-                      {...register("pageType")}
-                      className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3 focus:border-gold-primary focus:ring-1 focus:ring-gold-primary"
-                      onChange={(e) => setPageType(e.target.value as PageType)}
-                    >
-                      <option value="">Select a page type</option>
-                      <option value="AUTOBIOGRAPHY">Autobiography</option>
-                      <option value="BIOGRAPHY">Biography</option>
-                      <option value="MEMORIAL">Memorial</option>
-                    </select>
-                    {pageType && (
-                      <p className="text-gold-secondary text-sm mt-2">
-                        {pageType === "AUTOBIOGRAPHY" &&
-                          "A firsthand story created by the honouree, providing a personal account of their life."}
-                        {pageType === "BIOGRAPHY" &&
-                          "A page created for a child or adult who is unable to create the page themselves. It is crafted by the next of kin or someone with legal authority to act on behalf of the honouree."}
-                        {pageType === "MEMORIAL" &&
-                          "A page dedicated to the memory of an individual, created by the next of kin or someone with legal authority to act on behalf of the honouree."}
-                      </p>
-                    )}
-                  </div>
 
                   {/* Next of Kin Checkbox for Memorial */}
                   {pageType === "MEMORIAL" && (
@@ -1524,6 +1631,68 @@ export default function CreateLegacyPage() {
                     Add Quote
                   </button>
                 </div>
+
+                {/* Submit Button */}
+                <div className="mt-12">
+                  <button
+                    type="submit"
+                    disabled={
+                      isSubmitting || (pageType === "MEMORIAL" && !isNextOfKin)
+                    }
+                    className="relative w-full py-4 px-16 text-base font-medium text-purple-primary transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  >
+                    <div className="absolute inset-0">
+                      <Image
+                        src="/images/button.png"
+                        alt=""
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                    <span className="relative z-10 flex items-center justify-center space-x-2">
+                      {isSubmitting ? (
+                        <>
+                          <svg
+                            className="animate-spin h-5 w-5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          <span>Creating...</span>
+                        </>
+                      ) : (
+                        "Create Page"
+                      )}
+                    </span>
+                  </button>
+                </div>
+
+                {/* Error/Success Message */}
+                {submitMessage && (
+                  <div
+                    className={`mt-4 p-4 rounded-lg ${
+                      submitMessage.type === "success"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {submitMessage.message}
+                  </div>
+                )}
               </form>
             </div>
           </section>

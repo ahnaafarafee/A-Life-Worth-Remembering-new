@@ -31,6 +31,10 @@ const formSchema = z.object({
   coverPhoto: z.string().optional(),
   honoureePhoto: z.string().optional(),
   isNextOfKin: z.boolean().optional(),
+  // Font selections
+  headingFont: z.string().default("Playfair Display"),
+  bodyFont: z.string().default("Lora"),
+  accentFont: z.string().default("Cormorant Garamond"),
 
   // General Knowledge
   personality: z.string().optional(),
@@ -181,6 +185,20 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
     },
   });
 
+  // Font options
+  const fontOptions = [
+    { value: "Playfair Display", label: "Playfair Display" },
+    { value: "Lora", label: "Lora" },
+    { value: "Cormorant Garamond", label: "Cormorant Garamond" },
+    { value: "Merriweather", label: "Merriweather" },
+    { value: "Libre Baskerville", label: "Libre Baskerville" },
+    { value: "Crimson Text", label: "Crimson Text" },
+    { value: "Source Serif Pro", label: "Source Serif Pro" },
+    { value: "PT Serif", label: "PT Serif" },
+    { value: "Noto Serif", label: "Noto Serif" },
+    { value: "EB Garamond", label: "EB Garamond" },
+  ];
+
   useEffect(() => {
     const fetchPage = async () => {
       try {
@@ -212,6 +230,10 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
         setValue("personality", data.generalKnowledge?.personality || "");
         setValue("values", data.generalKnowledge?.values || "");
         setValue("beliefs", data.generalKnowledge?.beliefs || "");
+        // Set font values
+        setValue("headingFont", data.headingFont || "Playfair Display");
+        setValue("bodyFont", data.bodyFont || "Lora");
+        setValue("accentFont", data.accentFont || "Cormorant Garamond");
 
         // Set state values
         setPageType(data.pageType);
@@ -673,41 +695,116 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
           onSubmit={handleSubmit(onSubmit)}
           className="max-w-4xl mx-auto space-y-8 bg-white/10 backdrop-blur-lg rounded-lg p-8 shadow-gold"
         >
-          {/* Basic Information Section */}
+          {/* Page Type Selection */}
+          <div className="mb-8">
+            <h3 className="text-xl font-bold text-gold-primary mb-4">
+              Page Type
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {Object.values(PageType).map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() => setPageType(type)}
+                  className={`p-4 rounded-lg border-2 transition-colors ${
+                    pageType === type
+                      ? "border-gold-primary bg-gold-primary/10"
+                      : "border-gold-primary/30 hover:border-gold-primary/50"
+                  }`}
+                >
+                  <h4 className="font-bold text-gold-primary mb-2">
+                    {type.charAt(0) + type.slice(1).toLowerCase()}
+                  </h4>
+                  <p className="text-sm text-gold-secondary">
+                    {type === PageType.MEMORIAL
+                      ? "Honor and remember a loved one who has passed"
+                      : type === PageType.BIOGRAPHY
+                      ? "Share someone's life story and achievements"
+                      : "Tell your own life story and experiences"}
+                  </p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Typography Section */}
+          <div className="mb-8">
+            <h3 className="text-xl font-bold text-gold-primary mb-4">
+              Typography
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-gold-primary font-bold mb-2">
+                  Heading Font
+                </label>
+                <select
+                  {...register("headingFont")}
+                  className="w-full bg-white border border-gold-primary/50 text-gray-900 rounded-md p-3 focus:border-gold-primary focus:ring-1 focus:ring-gold-primary"
+                  style={{ fontFamily: "var(--heading-font)" }}
+                >
+                  {fontOptions.map((font) => (
+                    <option
+                      key={font.value}
+                      value={font.value}
+                      style={{ fontFamily: font.value }}
+                    >
+                      {font.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-gold-primary font-bold mb-2">
+                  Body Font
+                </label>
+                <select
+                  {...register("bodyFont")}
+                  className="w-full bg-white border border-gold-primary/50 text-gray-900 rounded-md p-3 focus:border-gold-primary focus:ring-1 focus:ring-gold-primary"
+                  style={{ fontFamily: "var(--body-font)" }}
+                >
+                  {fontOptions.map((font) => (
+                    <option
+                      key={font.value}
+                      value={font.value}
+                      style={{ fontFamily: font.value }}
+                    >
+                      {font.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-gold-primary font-bold mb-2">
+                  Accent Font
+                </label>
+                <select
+                  {...register("accentFont")}
+                  className="w-full bg-white border border-gold-primary/50 text-gray-900 rounded-md p-3 focus:border-gold-primary focus:ring-1 focus:ring-gold-primary"
+                  style={{ fontFamily: "var(--accent-font)" }}
+                >
+                  {fontOptions.map((font) => (
+                    <option
+                      key={font.value}
+                      value={font.value}
+                      style={{ fontFamily: font.value }}
+                    >
+                      {font.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <p className="mt-4 text-sm text-gold-secondary">
+              These fonts will be used throughout your legacy page. Choose fonts
+              that reflect the personality and style you want to convey.
+            </p>
+          </div>
+
+          {/* Basic Information */}
           <div className="space-y-6">
             <h3 className="text-xl font-bold text-gold-primary">
               Basic Information
             </h3>
-
-            {/* Page Type */}
-            <div className="mb-6">
-              <label className="block text-gold-primary font-bold mb-2">
-                Page Type
-              </label>
-              <div className="relative">
-                <select
-                  {...register("pageType")}
-                  disabled
-                  className="w-full bg-gray-100 border-2 border-gold-primary/50 text-gray-700 rounded-md p-3 cursor-not-allowed appearance-none"
-                  value={pageType}
-                >
-                  <option value="LEGACY">Legacy Page</option>
-                  <option value="MEMORIAL">Memorial Page</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <svg
-                    className="fill-current h-4 w-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                  </svg>
-                </div>
-              </div>
-              <p className="text-sm text-gold-secondary mt-2">
-                Page type cannot be changed after creation
-              </p>
-            </div>
 
             {/* Next of Kin Checkbox for Memorial */}
             {pageType === "MEMORIAL" && (
