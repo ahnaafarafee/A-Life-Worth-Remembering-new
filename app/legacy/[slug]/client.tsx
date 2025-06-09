@@ -29,6 +29,7 @@ interface LegacyPage {
     dateTaken: string;
     location: string | null;
     description: string | null;
+    category: string | null;
   }[];
   events: {
     name: string;
@@ -87,7 +88,31 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
     description: string | null;
     location: string | null;
     dateTaken: string;
+    category: string | null;
   } | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [categorySearch, setCategorySearch] = useState("");
+
+  // Get unique categories from media items
+  const categories =
+    page?.mediaItems
+      .filter((item) => item.type === "IMAGE" && item.category)
+      .map((item) => item.category)
+      .filter((category, index, self) => self.indexOf(category) === index) ||
+    [];
+
+  // Filter categories based on search
+  const filteredCategories = categories.filter((category) =>
+    category?.toLowerCase().includes(categorySearch.toLowerCase())
+  );
+
+  // Filter media items based on selected category
+  const filteredMediaItems =
+    page?.mediaItems.filter(
+      (item) =>
+        item.type === "IMAGE" &&
+        (!selectedCategory || item.category === selectedCategory)
+    ) || [];
 
   console.log("page", page);
 
@@ -291,13 +316,16 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
                 />
               </div>
             )}
+            <h1 className="text-2xl md:text-3xl font-bold mb-4">
+              Celebrating the life of
+            </h1>
             <h1 className="text-4xl md:text-5xl font-bold text-gold-primary mb-4">
               {page.honoureeName}
             </h1>
             <p className="text-xl text-gold-secondary mb-2">
-              {new Date(page.dateOfBirth).toLocaleDateString()} -{" "}
+              {new Date(page.dateOfBirth).toDateString()} -{" "}
               {page.dateOfPassing
-                ? new Date(page.dateOfPassing).toLocaleDateString()
+                ? new Date(page.dateOfPassing).toDateString()
                 : "Present"}
             </p>
             <p className="text-lg text-gold-secondary mb-2">
@@ -337,9 +365,16 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#1877F2] hover:bg-[#1877F2]/90 text-white px-4 py-2 rounded-md transition-colors"
+                className="bg-[#1877F2] hover:bg-[#1877F2]/90 text-white p-3 rounded-md transition-colors"
+                aria-label="Share on Facebook"
               >
-                Share on Facebook
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M18.77 7.46H14.5v-1.9c0-.9.6-1.1 1-1.1h3V.5h-4.33C10.24.5 9.5 3.44 9.5 5.32v2.15h-3v4h3v12h5v-12h3.85l.42-4z" />
+                </svg>
               </a>
 
               {/* Twitter Share */}
@@ -353,9 +388,16 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#1DA1F2] hover:bg-[#1DA1F2]/90 text-white px-4 py-2 rounded-md transition-colors"
+                className="bg-[#1DA1F2] hover:bg-[#1DA1F2]/90 text-white p-3 rounded-md transition-colors"
+                aria-label="Share on Twitter"
               >
-                Share on Twitter
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                </svg>
               </a>
 
               {/* LinkedIn Share */}
@@ -365,9 +407,16 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#0A66C2] hover:bg-[#0A66C2]/90 text-white px-4 py-2 rounded-md transition-colors"
+                className="bg-[#0A66C2] hover:bg-[#0A66C2]/90 text-white p-3 rounded-md transition-colors"
+                aria-label="Share on LinkedIn"
               >
-                Share on LinkedIn
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                </svg>
               </a>
             </div>
           </div>
@@ -476,48 +525,132 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
                     <h2 className="text-2xl font-bold text-gold-primary mb-6">
                       Gallery
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {page.mediaItems
-                        .filter((item) => item.type === "IMAGE")
-                        .map((item, index) => (
-                          <div
-                            key={index}
-                            className="relative aspect-square group"
+
+                    {/* Category Search and Filter */}
+                    {categories.length > 0 && (
+                      <div className="mb-6 space-y-4">
+                        {/* Search Bar */}
+                        <div className="relative">
+                          <input
+                            type="text"
+                            placeholder="Search categories..."
+                            value={categorySearch}
+                            onChange={(e) => setCategorySearch(e.target.value)}
+                            className="w-full md:w-96 px-4 py-2 pl-10 rounded-lg border border-gold-primary/30 focus:border-gold-primary focus:ring-1 focus:ring-gold-primary outline-none transition-colors bg-white/50"
+                          />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-gold-primary/50"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                           >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                            />
+                          </svg>
+                        </div>
+
+                        {/* Category Filter Buttons */}
+                        <div className="flex flex-wrap gap-2">
+                          <button
+                            onClick={() => setSelectedCategory(null)}
+                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                              selectedCategory === null
+                                ? "bg-gold-primary text-white"
+                                : "bg-gold-primary/20 text-gold-primary hover:bg-gold-primary/30"
+                            }`}
+                          >
+                            All Photos
+                          </button>
+                          {filteredCategories.map((category) => (
+                            <button
+                              key={category}
+                              onClick={() => setSelectedCategory(category)}
+                              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                                selectedCategory === category
+                                  ? "bg-gold-primary text-white"
+                                  : "bg-gold-primary/20 text-gold-primary hover:bg-gold-primary/30"
+                              }`}
+                            >
+                              {category}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      {filteredMediaItems.map((item, index) => (
+                        <div
+                          key={index}
+                          className="relative aspect-square group"
+                        >
+                          <Image
+                            src={getSupabaseUrl(item.url)}
+                            alt={item.description || `Media item ${index + 1}`}
+                            fill
+                            className="object-cover rounded-lg transition-transform group-hover:scale-105"
+                          />
+                          {(item.location ||
+                            item.description ||
+                            item.category) && (
                             <div
-                              className="w-full h-full cursor-pointer"
+                              className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg cursor-pointer"
                               onClick={() =>
                                 setSelectedImage({
                                   url: getSupabaseUrl(item.url),
                                   description: item.description,
                                   location: item.location,
                                   dateTaken: item.dateTaken,
+                                  category: item.category,
                                 })
                               }
                             >
-                              <Image
-                                src={getSupabaseUrl(item.url)}
-                                alt={
-                                  item.description || `Media item ${index + 1}`
-                                }
-                                fill
-                                className="object-cover rounded-lg transition-transform group-hover:scale-105"
-                              />
-                            </div>
-                            {(item.location || item.description) && (
-                              <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-4 rounded-b-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                              <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                                {item.category && (
+                                  <span className="inline-block bg-gold-primary/90 text-white px-3 py-1 rounded-full text-sm font-medium mb-2">
+                                    {item.category}
+                                  </span>
+                                )}
                                 {item.location && (
-                                  <p className="text-sm mb-1">
+                                  <p className="text-sm mb-1 flex items-center">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-4 w-4 mr-1"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                                      />
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                                      />
+                                    </svg>
                                     {item.location}
                                   </p>
                                 )}
                                 {item.description && (
-                                  <p className="text-sm">{item.description}</p>
+                                  <p className="text-sm line-clamp-2">
+                                    {item.description}
+                                  </p>
                                 )}
                               </div>
-                            )}
-                          </div>
-                        ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
@@ -825,17 +958,22 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
             </div>
 
             {/* Image Details */}
-            <div className="bg-black/80 text-white p-6">
+            <div className="bg-gradient-to-t from-black/90 to-black/70 text-white p-6">
               <div className="max-w-4xl mx-auto">
+                {selectedImage.category && (
+                  <span className="inline-block bg-gold-primary/90 text-white px-4 py-1.5 rounded-full text-sm font-medium mb-3">
+                    {selectedImage.category}
+                  </span>
+                )}
                 {selectedImage.description && (
                   <p className="text-lg mb-4">{selectedImage.description}</p>
                 )}
                 <div className="flex flex-wrap gap-4 text-sm text-gray-300">
                   {selectedImage.location && (
-                    <div className="flex items-center">
+                    <div className="flex items-center bg-black/30 px-3 py-1.5 rounded-full">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 mr-2"
+                        className="h-4 w-4 mr-2"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -856,10 +994,10 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
                       {selectedImage.location}
                     </div>
                   )}
-                  <div className="flex items-center">
+                  <div className="flex items-center bg-black/30 px-3 py-1.5 rounded-full">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mr-2"
+                      className="h-4 w-4 mr-2"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"

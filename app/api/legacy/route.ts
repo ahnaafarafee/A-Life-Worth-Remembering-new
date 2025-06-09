@@ -88,6 +88,9 @@ export async function POST(req: NextRequest) {
       const description = formData.get(
         `photos[${photoIndex}][description]`
       ) as string;
+      const category = formData.get(
+        `photos[${photoIndex}][category]`
+      ) as string;
 
       let filePath;
       if (file && file.size > 0) {
@@ -95,10 +98,12 @@ export async function POST(req: NextRequest) {
       }
 
       photos.push({
-        dateTaken,
-        location,
-        description,
-        file: filePath,
+        type: "IMAGE" as MediaType,
+        url: filePath || "",
+        dateTaken: new Date(dateTaken),
+        location: location || null,
+        description: description || null,
+        category: category || null,
       });
 
       photoIndex++;
@@ -236,10 +241,11 @@ export async function POST(req: NextRequest) {
           create: [
             ...photos.map((photo) => ({
               type: "IMAGE" as MediaType,
-              url: photo.file || "",
-              dateTaken: new Date(photo.dateTaken),
+              url: photo.url,
+              dateTaken: photo.dateTaken,
               location: photo.location,
               description: photo.description,
+              category: photo.category,
             })),
             ...soundClips.map((clip) => ({
               type: "AUDIO" as MediaType,

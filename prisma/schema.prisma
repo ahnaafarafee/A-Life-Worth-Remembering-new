@@ -91,11 +91,12 @@ model GeneralKnowledge {
 
 model MediaItem {
   id           String     @id @default(cuid())
-  type         MediaType
+  type         MediaType // "IMAGE", "VIDEO", "AUDIO"
   url          String
   dateTaken    DateTime
   location     String?
   description  String?    @db.Text
+  category     String? // New field for photo categories
   legacyPageId String
   legacyPage   LegacyPage @relation(fields: [legacyPageId], references: [id], onDelete: Cascade)
   createdAt    DateTime   @default(now())

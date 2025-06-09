@@ -46,6 +46,7 @@ const formSchema = z.object({
         dateTaken: z.string(),
         location: z.string().optional(),
         description: z.string().optional(),
+        category: z.string().optional(),
       })
     )
     .default([]),
@@ -228,6 +229,7 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
               dateTaken: new Date(item.dateTaken).toISOString().split("T")[0],
               location: item.location || "",
               description: item.description || "",
+              category: item.category || "",
             }));
           setPhotos(photos);
 
@@ -358,7 +360,7 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
           // New photo file
           formData.append(`photos[${index}][file]`, photo.file);
         } else if (photo.preview) {
-          // Existing photo
+          // Existing photo - preserve the URL
           formData.append(`photos[${index}][preview]`, photo.preview);
         }
         formData.append(`photos[${index}][dateTaken]`, photo.dateTaken);
@@ -367,6 +369,9 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
         }
         if (photo.description) {
           formData.append(`photos[${index}][description]`, photo.description);
+        }
+        if (photo.category) {
+          formData.append(`photos[${index}][category]`, photo.category);
         }
       });
 
@@ -462,6 +467,7 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
       dateTaken: new Date().toISOString().split("T")[0],
       location: "",
       description: "",
+      category: "",
     };
     setPhotos([...photos, newPhoto]);
   };
@@ -794,6 +800,78 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
             </div>
 
             {/* Photo Upload Fields */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+              <div>
+                <label className="block text-gold-primary font-bold">
+                  Honouree Photo
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setHonoureePhotoPreview(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                />
+                {honoureePhotoPreview && (
+                  <div className="mt-2">
+                    <Image
+                      src={`https://klfqodiuibtslxgeyjee.supabase.co/storage/v1/object/public/legacy-media/${honoureePhotoPreview}`}
+                      alt="Honouree photo preview"
+                      width={128}
+                      height={128}
+                      className="object-cover rounded-md"
+                    />
+                  </div>
+                )}
+                <p className="text-sm text-gold-secondary mt-1">
+                  Upload a clear photo of the honouree
+                </p>
+              </div>
+              <div>
+                <label className="block text-gold-primary font-bold">
+                  Cover Photo
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setCoverPhotoPreview(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                />
+                {coverPhotoPreview && (
+                  <div className="mt-2">
+                    <Image
+                      src={`https://klfqodiuibtslxgeyjee.supabase.co/storage/v1/object/public/legacy-media/${coverPhotoPreview}`}
+                      alt="Cover photo preview"
+                      width={128}
+                      height={128}
+                      className="object-cover rounded-md"
+                    />
+                  </div>
+                )}
+                <p className="text-sm text-gold-secondary mt-1">
+                  Upload a cover photo for the legacy page
+                </p>
+              </div>
+            </div>
+
+            {/* Photo Upload Fields */}
             <div className="space-y-6">
               <h3 className="text-xl font-bold text-gold-primary">Photos</h3>
 
@@ -826,7 +904,7 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
                             {photo.preview && (
                               <div className="relative w-24 h-24">
                                 <Image
-                                  src={photo.preview}
+                                  src={`https://klfqodiuibtslxgeyjee.supabase.co/storage/v1/object/public/legacy-media/${photo.preview}`}
                                   alt={`Preview ${index + 1}`}
                                   fill
                                   className="object-cover rounded-lg"
@@ -897,9 +975,29 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
                                 "photos"
                               )
                             }
-                            placeholder="Describe this photo..."
+                            placeholder="Tell us about this photo..."
                             className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
                             rows={3}
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-gold-secondary mb-1">
+                            Category (Optional)
+                          </label>
+                          <input
+                            type="text"
+                            value={photo.category}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "category",
+                                e.target.value,
+                                "photos"
+                              )
+                            }
+                            placeholder="e.g., Family, Travel, Celebration"
+                            className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
                           />
                         </div>
                       </div>

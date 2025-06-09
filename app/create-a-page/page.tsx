@@ -51,6 +51,7 @@ const formSchema = z.object({
         dateTaken: z.string(),
         location: z.string().optional(),
         description: z.string().optional(),
+        category: z.string().optional(),
       })
     )
     .default([]),
@@ -300,6 +301,9 @@ export default function CreateLegacyPage() {
         if (photo.description) {
           formData.append(`photos[${index}][description]`, photo.description);
         }
+        if (photo.category) {
+          formData.append(`photos[${index}][category]`, photo.category);
+        }
       });
 
       // Add sound clips
@@ -393,6 +397,7 @@ export default function CreateLegacyPage() {
       dateTaken: new Date().toISOString().split("T")[0],
       location: "",
       description: "",
+      category: "",
     };
     setPhotos([...photos, newPhoto]);
   };
@@ -944,6 +949,26 @@ export default function CreateLegacyPage() {
                                 placeholder="Tell us about this photo..."
                                 className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
                                 rows={3}
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-gold-secondary mb-1">
+                                Category (Optional)
+                              </label>
+                              <input
+                                type="text"
+                                value={photo.category}
+                                onChange={(e) =>
+                                  handleItemChange(
+                                    index,
+                                    "category",
+                                    e.target.value,
+                                    "photos"
+                                  )
+                                }
+                                placeholder="e.g., Family, Travel, Celebration"
+                                className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-2"
                               />
                             </div>
                           </div>

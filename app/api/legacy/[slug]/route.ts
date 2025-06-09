@@ -202,30 +202,27 @@ export async function PUT(
       const description = formData.get(
         `photos[${photoIndex}][description]`
       ) as string;
+      const category = formData.get(
+        `photos[${photoIndex}][category]`
+      ) as string;
 
+      let filePath;
       if (file && file.size > 0) {
-        // New photo
-        const path = await uploadToSupabase(
-          file,
-          `photo-${Date.now()}-${photoIndex}`
-        );
-        photos.push({
-          type: "IMAGE" as MediaType,
-          url: path,
-          dateTaken: new Date(dateTaken),
-          location: location || null,
-          description: description || null,
-        });
+        filePath = await uploadToSupabase(file, `photos/${photoIndex}`);
       } else if (preview) {
-        // Existing photo
-        photos.push({
-          type: "IMAGE" as MediaType,
-          url: preview,
-          dateTaken: new Date(dateTaken),
-          location: location || null,
-          description: description || null,
-        });
+        // If it's an existing photo, use the preview URL
+        filePath = preview;
       }
+
+      photos.push({
+        type: "IMAGE" as MediaType,
+        url: filePath || "",
+        dateTaken: new Date(dateTaken),
+        location: location || null,
+        description: description || null,
+        category: category || null,
+      });
+
       photoIndex++;
     }
 
@@ -331,59 +328,27 @@ export async function PUT(
     const quotes = [];
     let quoteIndex = 0;
     while (formData.has(`quotes[${quoteIndex}][text]`)) {
-      const text = formData.get(`quotes[${quoteIndex}][text]`);
-      const author = formData.get(`quotes[${quoteIndex}][author]`);
-      if (text) {
-        quotes.push({
-          text: text.toString(),
-          author: author ? author.toString() : null,
-        });
-      }
+      const text = formData.get(`quotes[${quoteIndex}][text]`) as string;
+      quotes.push({
+        text: text,
+      });
       quoteIndex++;
     }
 
-    // Update legacy page in database
-    const updatedPage = await prisma.legacyPage.update({
+    // Update the legacy page with the new data
+    const updatedLegacyPage = await prisma.legacyPage.update({
       where: { id: legacyPage.id },
       data: {
-        pageType: formData.get("pageType") as PageType,
-        honoureeName: formData.get("honoureeName") as string,
-        creatorName: formData.get("creatorName") as string,
-        dateOfBirth: new Date(formData.get("dateOfBirth") as string),
-        hasTransitioned: formData.get("hasTransitioned") === "true",
-        dateOfPassing: formData.get("dateOfPassing")
-          ? new Date(formData.get("dateOfPassing") as string)
-          : null,
-        relationship: formData.get("relationship") as string,
-        storyName: formData.get("storyName") as string,
-        story: formData.get("story") as string,
         honoureePhoto: honoureePhotoPath,
         coverPhoto: coverPhotoPath,
-        generalKnowledge: {
-          update: {
-            personality: formData.get("personality") as string,
-            values: formData.get("values") as string,
-            beliefs: formData.get("beliefs") as string,
-          },
-        },
-        memorialDetails: {
-          update: {
-            funeralWishes: formData.get("funeralWishes") as string,
-            obituary: formData.get("obituary") as string,
-            funeralHome: formData.get("funeralHome") as string,
-            viewingDetails: formData.get("viewingDetails") as string,
-            processionDetails: formData.get("processionDetails") as string,
-            serviceDetails: formData.get("serviceDetails") as string,
-            wakeDetails: formData.get("wakeDetails") as string,
-            finalRestingPlace: formData.get("finalRestingPlace") as string,
-            eulogy: formData.get("eulogy") as string,
-            orderOfService: formData.get("orderOfService") as string,
-            familyMessage: formData.get("familyMessage") as string,
-            memorialVideo: formData.get("memorialVideo") as string,
-            tributes: formData.get("tributes") as string,
-            messageFromHonouree: formData.get("messageFromHonouree") as string,
-          },
-        },
+        // photos: {
+        //   deleteMany: {},
+        //   create: photos,
+        // },
+        // soundClips: {
+        //   deleteMany: {},
+        //   create: soundClips,
+        // },
         mediaItems: {
           deleteMany: {},
           create: [...photos, ...soundClips],
@@ -402,22 +367,12 @@ export async function PUT(
         },
         quotes: {
           deleteMany: {},
-          createMany: {
-            data: quotes,
-          },
+          create: quotes,
         },
-      },
-      include: {
-        user: true,
-        mediaItems: true,
-        events: true,
-        relationships: true,
-        insights: true,
-        quotes: true,
       },
     });
 
-    return NextResponse.json({ success: true, data: updatedPage });
+    return NextResponse.json(updatedLegacyPage);
   } catch (error) {
     console.error("Error updating legacy page:", error);
     return NextResponse.json(
