@@ -702,14 +702,12 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {Object.values(PageType).map((type) => (
-                <button
+                <div
                   key={type}
-                  type="button"
-                  onClick={() => setPageType(type)}
-                  className={`p-4 rounded-lg border-2 transition-colors ${
+                  className={`p-4 rounded-lg border-2 ${
                     pageType === type
                       ? "border-gold-primary bg-gold-primary/10"
-                      : "border-gold-primary/30 hover:border-gold-primary/50"
+                      : "border-gold-primary/30 opacity-50"
                   }`}
                 >
                   <h4 className="font-bold text-gold-primary mb-2">
@@ -722,7 +720,7 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
                       ? "Share someone's life story and achievements"
                       : "Tell your own life story and experiences"}
                   </p>
-                </button>
+                </div>
               ))}
             </div>
           </div>
@@ -965,6 +963,30 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
                 <p className="text-sm text-gold-secondary mt-1">
                   Upload a cover photo for the legacy page
                 </p>
+              </div>
+            </div>
+
+            {/* Story Section */}
+            <div className="space-y-4">
+              <h3 className="text-xl font-bold text-gold-primary">Story</h3>
+              <div>
+                <label className="block text-gold-primary font-bold">
+                  Story Title
+                </label>
+                <input
+                  {...register("storyName")}
+                  placeholder="e.g., My Life Journey, Memories, Legacy"
+                  className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3 mb-4"
+                />
+                <label className="block text-gold-primary font-bold">
+                  Story Content
+                </label>
+                <textarea
+                  {...register("story")}
+                  rows={6}
+                  className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                  placeholder="Share the honouree's story..."
+                />
               </div>
             </div>
 
