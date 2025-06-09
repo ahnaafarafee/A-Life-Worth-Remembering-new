@@ -223,6 +223,7 @@ export async function POST(req: NextRequest) {
         honoureePhoto: honoureePhotoPath,
         coverPhoto: coverPhotoPath,
         backgroundImage: backgroundImagePath,
+        videoUrl: formData.get("videoUrl") as string,
         ...(formData.get("headingFont") && {
           headingFont: formData.get("headingFont") as string,
         }),

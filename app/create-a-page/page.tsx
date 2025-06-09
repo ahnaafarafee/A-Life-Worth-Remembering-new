@@ -36,6 +36,7 @@ const formSchema = z.object({
   coverPhoto: z.string().optional(),
   honoureePhoto: z.string().optional(),
   backgroundImage: z.string().optional(),
+  videoUrl: z.string().url().optional(),
   isNextOfKin: z.boolean().optional(),
   // Font selections
   headingFont: z.string().default("Playfair Display"),
@@ -163,6 +164,9 @@ export default function CreateLegacyPage() {
   );
   const [insights, setInsights] = useState<FormData["insights"]>([]);
   const [isNextOfKin, setIsNextOfKin] = useState(false);
+  const [isAuthorizedBiography, setIsAuthorizedBiography] = useState(false);
+  const [isAuthorizedAutobiography, setIsAuthorizedAutobiography] =
+    useState(false);
   const [isCustomRelationship, setIsCustomRelationship] = useState(false);
   const [hasExistingPage, setHasExistingPage] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -607,6 +611,10 @@ export default function CreateLegacyPage() {
                 {/* Page Type Selection */}
                 <div className="mb-8">
                   <h3 className="text-xl font-bold text-gold-primary mb-4">
+                    Page Information
+                  </h3>
+
+                  <h3 className="text-xl font-bold text-gold-primary mb-4">
                     Page Type
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -634,6 +642,114 @@ export default function CreateLegacyPage() {
                       </button>
                     ))}
                   </div>
+                </div>
+
+                {/* Next of Kin Checkbox for Memorial */}
+                {pageType === "MEMORIAL" && (
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="isNextOfKin"
+                      checked={isNextOfKin}
+                      onChange={(e) => setIsNextOfKin(e.target.checked)}
+                      className="h-4 w-4 text-gold-primary focus:ring-gold-primary border-gold-primary/50 rounded"
+                    />
+                    <label
+                      htmlFor="isNextOfKin"
+                      className="text-gold-secondary"
+                    >
+                      I confirm that I am the next of kin and have legal
+                      authority to create this page on behalf of the honouree
+                    </label>
+                  </div>
+                )}
+
+                {/* Confirm authority for Biography */}
+                {pageType === "BIOGRAPHY" && (
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="isAuthorizedBiography"
+                      checked={isAuthorizedBiography}
+                      onChange={(e) =>
+                        setIsAuthorizedBiography(e.target.checked)
+                      }
+                      className="h-4 w-4 text-gold-primary focus:ring-gold-primary border-gold-primary/50 rounded"
+                    />
+                    <label
+                      htmlFor="isAuthorizedBiography"
+                      className="text-gold-secondary"
+                    >
+                      I confirm that I have the authority to create this page on
+                      behalf of the honouree.
+                    </label>
+                  </div>
+                )}
+
+                {/* Confirm authority for Autobiography */}
+                {pageType === "AUTOBIOGRAPHY" && (
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="isAuthorizedAutobiography"
+                      checked={isAuthorizedAutobiography}
+                      onChange={(e) =>
+                        setIsAuthorizedAutobiography(e.target.checked)
+                      }
+                      className="h-4 w-4 text-gold-primary focus:ring-gold-primary border-gold-primary/50 rounded"
+                    />
+                    <label
+                      htmlFor="isAuthorizedAutobiography"
+                      className="text-gold-secondary"
+                    >
+                      I confirm that I am the honouree and have legal authority
+                      to create this page on behalf of myself.
+                    </label>
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-gold-primary font-bold">
+                    Unique Page URL
+                  </label>
+                  <input
+                    {...register("slug")}
+                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                    placeholder="your-unique-page-url"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gold-primary font-bold">
+                    Background Image
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setBackgroundImagePreview(reader.result as string);
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                  />
+                  {backgroundImagePreview && (
+                    <div className="mt-2">
+                      <img
+                        src={backgroundImagePreview}
+                        alt="Background image preview"
+                        className="w-32 h-32 object-cover rounded-md"
+                      />
+                    </div>
+                  )}
+                  <p className="text-sm text-gold-secondary mt-1">
+                    Upload a background image for the page (optional)
+                  </p>
                 </div>
 
                 {/* Typography Section */}
@@ -710,54 +826,12 @@ export default function CreateLegacyPage() {
                   </p>
                 </div>
 
-                {/* Basic Information Section */}
-                <div className="space-y-6">
-                  <h3 className="text-xl font-bold text-gold-primary">
-                    Basic Information
+                {/* Account Holder's Details Section */}
+                <div>
+                  <h3 className="text-xl font-bold text-gold-primary mb-4">
+                    Account Holder's Details
                   </h3>
-
-                  {/* Next of Kin Checkbox for Memorial */}
-                  {pageType === "MEMORIAL" && (
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id="isNextOfKin"
-                        checked={isNextOfKin}
-                        onChange={(e) => setIsNextOfKin(e.target.checked)}
-                        className="h-4 w-4 text-gold-primary focus:ring-gold-primary border-gold-primary/50 rounded"
-                      />
-                      <label
-                        htmlFor="isNextOfKin"
-                        className="text-gold-secondary"
-                      >
-                        I confirm that I am the next of kin and have legal
-                        authority to create this page on behalf of the honouree
-                      </label>
-                    </div>
-                  )}
-
-                  {/* Other Basic Fields */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Unique Page URL
-                      </label>
-                      <input
-                        {...register("slug")}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="your-unique-page-url"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Honouree Name
-                      </label>
-                      <input
-                        {...register("honoureeName")}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Enter honouree's full name"
-                      />
-                    </div>
                     <div>
                       <label className="block text-gold-primary font-bold">
                         Your Name
@@ -768,6 +842,37 @@ export default function CreateLegacyPage() {
                         placeholder="Enter your full name"
                       />
                     </div>
+                    <div>
+                      <label className="block text-gold-primary font-bold">
+                        Relationship
+                      </label>
+                      <input
+                        {...register("relationship")}
+                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                        placeholder="Your relationship to the honouree"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Basic Information Section */}
+                <div className="space-y-6">
+                  <h3 className="text-xl font-bold text-gold-primary mb-4">
+                    Honouree's Details
+                  </h3>
+                  {/* Other Basic Fields */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-gold-primary font-bold">
+                        Honouree Name
+                      </label>
+                      <input
+                        {...register("honoureeName")}
+                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                        placeholder="Enter honouree's full name"
+                      />
+                    </div>
+
                     <div>
                       <label className="block text-gold-primary font-bold">
                         Date of Birth
@@ -807,23 +912,13 @@ export default function CreateLegacyPage() {
                         />
                       </div>
                     )}
-                    <div>
-                      <label className="block text-gold-primary font-bold">
-                        Relationship
-                      </label>
-                      <input
-                        {...register("relationship")}
-                        className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
-                        placeholder="Your relationship to the honouree"
-                      />
-                    </div>
                   </div>
 
                   {/* Photo Upload Fields */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                     <div>
                       <label className="block text-gold-primary font-bold">
-                        Honouree Photo
+                        Honouree's Profile Picture
                       </label>
                       <input
                         type="file"
@@ -885,53 +980,38 @@ export default function CreateLegacyPage() {
                         Upload a cover photo for the legacy page
                       </p>
                     </div>
+                  </div>
+
+                  {/* Video URL Section */}
+                  <div className="space-y-6">
+                  
                     <div>
                       <label className="block text-gold-primary font-bold">
-                        Background Image
+                        Introduction Video
                       </label>
                       <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            const reader = new FileReader();
-                            reader.onloadend = () => {
-                              setBackgroundImagePreview(
-                                reader.result as string
-                              );
-                            };
-                            reader.readAsDataURL(file);
-                          }
-                        }}
+                        {...register("videoUrl")}
+                        type="url"
+                        placeholder="Enter video URL (YouTube, Vimeo, etc.)"
                         className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
                       />
-                      {backgroundImagePreview && (
-                        <div className="mt-2">
-                          <img
-                            src={backgroundImagePreview}
-                            alt="Background image preview"
-                            className="w-32 h-32 object-cover rounded-md"
-                          />
-                        </div>
-                      )}
                       <p className="text-sm text-gold-secondary mt-1">
-                        Upload a background image for the page (optional)
+                        Add a video URL to be displayed on the legacy page
+                        (optional)
                       </p>
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-gold-primary font-bold">
-                      Story Title
+                      Introduction Title
                     </label>
                     <input
                       {...register("storyName")}
-                      placeholder="e.g., My Life Journey, Memories, Legacy"
+                      placeholder="A Life Worth Remembering"
                       className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3 mb-4"
                     />
                     <label className="block text-gold-primary font-bold">
-                      Story Content
+                      Introduction
                     </label>
                     <textarea
                       {...register("story")}
@@ -1600,7 +1680,7 @@ export default function CreateLegacyPage() {
                 {/* Quotes Section */}
                 <div className="space-y-6">
                   <h3 className="text-xl font-bold text-gold-primary">
-                    Quotes
+                    Quotes Or Personal Message
                   </h3>
 
                   {quotes.length > 0 && (
@@ -1681,7 +1761,11 @@ export default function CreateLegacyPage() {
                   <button
                     type="submit"
                     disabled={
-                      isSubmitting || (pageType === "MEMORIAL" && !isNextOfKin)
+                      isSubmitting ||
+                      (pageType === "MEMORIAL" && !isNextOfKin) ||
+                      (pageType === "BIOGRAPHY" && !isAuthorizedBiography) ||
+                      (pageType === "AUTOBIOGRAPHY" &&
+                        !isAuthorizedAutobiography)
                     }
                     className="relative w-full py-4 px-16 text-base font-medium text-purple-primary transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   >

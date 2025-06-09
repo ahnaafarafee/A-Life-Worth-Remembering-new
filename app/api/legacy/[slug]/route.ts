@@ -359,9 +359,10 @@ export async function PUT(
         relationship: formData.get("relationship") as string,
         storyName: formData.get("storyName") as string,
         story: formData.get("story") as string,
-        ...(honoureePhotoPath && { honoureePhoto: honoureePhotoPath }),
-        ...(coverPhotoPath && { coverPhoto: coverPhotoPath }),
-        ...(backgroundImagePath && { backgroundImage: backgroundImagePath }),
+        honoureePhoto: honoureePhotoPath || legacyPage.honoureePhoto,
+        coverPhoto: coverPhotoPath || legacyPage.coverPhoto,
+        backgroundImage: backgroundImagePath || legacyPage.backgroundImage,
+        videoUrl: formData.get("videoUrl") as string,
         ...(formData.get("headingFont") && {
           headingFont: formData.get("headingFont") as string,
         }),

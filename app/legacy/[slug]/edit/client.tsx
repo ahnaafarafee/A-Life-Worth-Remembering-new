@@ -31,6 +31,7 @@ const formSchema = z.object({
   coverPhoto: z.string().optional(),
   honoureePhoto: z.string().optional(),
   backgroundImage: z.string().optional(),
+  videoUrl: z.string().url().optional(),
   isNextOfKin: z.boolean().optional(),
   // Font selections
   headingFont: z.string().default("Playfair Display"),
@@ -735,6 +736,23 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
             </div>
           </div>
 
+          {/* Next of Kin Checkbox for Memorial */}
+          {pageType === "MEMORIAL" && (
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="isNextOfKin"
+                checked={isNextOfKin}
+                onChange={(e) => setIsNextOfKin(e.target.checked)}
+                className="h-4 w-4 text-gold-primary focus:ring-gold-primary border-gold-primary/50 rounded"
+              />
+              <label htmlFor="isNextOfKin" className="text-gold-secondary">
+                I confirm that I am the next of kin and have legal authority to
+                create this page on behalf of the honouree
+              </label>
+            </div>
+          )}
+
           {/* Typography Section */}
           <div className="mb-8">
             <h3 className="text-xl font-bold text-gold-primary mb-4">
@@ -811,25 +829,8 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
           {/* Basic Information */}
           <div className="space-y-6">
             <h3 className="text-xl font-bold text-gold-primary">
-              Basic Information
+              Page Information
             </h3>
-
-            {/* Next of Kin Checkbox for Memorial */}
-            {pageType === "MEMORIAL" && (
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="isNextOfKin"
-                  checked={isNextOfKin}
-                  onChange={(e) => setIsNextOfKin(e.target.checked)}
-                  className="h-4 w-4 text-gold-primary focus:ring-gold-primary border-gold-primary/50 rounded"
-                />
-                <label htmlFor="isNextOfKin" className="text-gold-secondary">
-                  I confirm that I am the next of kin and have legal authority
-                  to create this page on behalf of the honouree
-                </label>
-              </div>
-            )}
 
             {/* Other Basic Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -901,6 +902,19 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
                   className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
                   placeholder="Your relationship to the honouree"
                 />
+              </div>
+              <div>
+                <label className="block text-gold-primary font-bold">
+                  Introduction Video URL
+                </label>
+                <input
+                  {...register("videoUrl")}
+                  className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                  placeholder="Enter video URL (e.g., YouTube or Vimeo)"
+                />
+                <p className="text-sm text-gold-secondary mt-1">
+                  Optional. This video will be displayed on the legacy page.
+                </p>
               </div>
             </div>
 

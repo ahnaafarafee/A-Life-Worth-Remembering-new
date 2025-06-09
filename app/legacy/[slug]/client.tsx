@@ -20,6 +20,7 @@ interface LegacyPage {
   story: string;
   honoureePhoto: string | null;
   coverPhoto: string | null;
+  videoUrl: string | null;
   personality: string | null;
   values: string | null;
   beliefs: string | null;
@@ -485,6 +486,21 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
                     </div>
                   ))}
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* Video Section */}
+          {page.videoUrl && (
+            <div className="w-full max-w-4xl mx-auto px-4 py-8">
+              <div className="aspect-w-16 aspect-h-9">
+                <iframe
+                  src={page.videoUrl}
+                  title="Legacy Video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full rounded-lg shadow-lg"
+                />
               </div>
             </div>
           )}

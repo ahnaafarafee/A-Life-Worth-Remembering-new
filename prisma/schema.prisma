@@ -55,6 +55,7 @@ model LegacyPage {
   relationship     String
   storyName        String            @default("Story")
   story            String            @db.Text
+  videoUrl         String?
   coverPhoto       String?
   backgroundImage  String?
   honoureePhoto    String?
