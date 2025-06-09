@@ -30,6 +30,7 @@ const formSchema = z.object({
   story: z.string().min(10),
   coverPhoto: z.string().optional(),
   honoureePhoto: z.string().optional(),
+  backgroundImage: z.string().optional(),
   isNextOfKin: z.boolean().optional(),
   // Font selections
   headingFont: z.string().default("Playfair Display"),
@@ -147,6 +148,9 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
   const [coverPhotoPreview, setCoverPhotoPreview] = useState<string | null>(
     null
   );
+  const [backgroundImagePreview, setBackgroundImagePreview] = useState<
+    string | null
+  >(null);
   const [photos, setPhotos] = useState<FormData["photos"]>([]);
   const [soundClips, setSoundClips] = useState<FormData["soundClips"]>([]);
   const [events, setEvents] = useState<FormData["events"]>([]);
@@ -240,6 +244,7 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
         setHasTransitioned(data.hasTransitioned);
         setHonoureePhotoPreview(data.honoureePhoto);
         setCoverPhotoPreview(data.coverPhoto);
+        setBackgroundImagePreview(data.backgroundImage);
         setIsNextOfKin(data.isNextOfKin);
 
         // Set media items
@@ -355,25 +360,30 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
             formData.append(key, value.toString());
           } else if (typeof value === "string") {
             formData.append(key, value);
+          } else if (Array.isArray(value)) {
+            // Handle arrays separately
+            return;
           }
         }
       });
 
-      // Add media files only if they've been changed
-      if (honoureePhotoPreview && honoureePhotoPreview.startsWith("data:")) {
+      // Add media files
+      if (honoureePhotoPreview) {
         const response = await fetch(honoureePhotoPreview);
         const blob = await response.blob();
         formData.append("honoureePhoto", blob);
-      } else if (honoureePhotoPreview) {
-        formData.append("honoureePhoto", honoureePhotoPreview);
       }
 
-      if (coverPhotoPreview && coverPhotoPreview.startsWith("data:")) {
+      if (coverPhotoPreview) {
         const response = await fetch(coverPhotoPreview);
         const blob = await response.blob();
         formData.append("coverPhoto", blob);
-      } else if (coverPhotoPreview) {
-        formData.append("coverPhoto", coverPhotoPreview);
+      }
+
+      if (backgroundImagePreview) {
+        const response = await fetch(backgroundImagePreview);
+        const blob = await response.blob();
+        formData.append("backgroundImage", blob);
       }
 
       // Add photos - only send new files or modified data
@@ -895,7 +905,7 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
             </div>
 
             {/* Photo Upload Fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
               <div>
                 <label className="block text-gold-primary font-bold">
                   Honouree Photo
@@ -917,12 +927,10 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
                 />
                 {honoureePhotoPreview && (
                   <div className="mt-2">
-                    <Image
-                      src={`https://klfqodiuibtslxgeyjee.supabase.co/storage/v1/object/public/legacy-media/${honoureePhotoPreview}`}
+                    <img
+                      src={honoureePhotoPreview}
                       alt="Honouree photo preview"
-                      width={128}
-                      height={128}
-                      className="object-cover rounded-md"
+                      className="w-32 h-32 object-cover rounded-md"
                     />
                   </div>
                 )}
@@ -951,17 +959,47 @@ export default function EditLegacyPageClient({ slug }: { slug: string }) {
                 />
                 {coverPhotoPreview && (
                   <div className="mt-2">
-                    <Image
-                      src={`https://klfqodiuibtslxgeyjee.supabase.co/storage/v1/object/public/legacy-media/${coverPhotoPreview}`}
+                    <img
+                      src={coverPhotoPreview}
                       alt="Cover photo preview"
-                      width={128}
-                      height={128}
-                      className="object-cover rounded-md"
+                      className="w-32 h-32 object-cover rounded-md"
                     />
                   </div>
                 )}
                 <p className="text-sm text-gold-secondary mt-1">
                   Upload a cover photo for the legacy page
+                </p>
+              </div>
+              <div>
+                <label className="block text-gold-primary font-bold">
+                  Background Image
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setBackgroundImagePreview(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="w-full bg-white border border-gold-primary/50 text-gray-900 placeholder:text-gray-500 rounded-md p-3"
+                />
+                {backgroundImagePreview && (
+                  <div className="mt-2">
+                    <img
+                      src={backgroundImagePreview}
+                      alt="Background image preview"
+                      className="w-32 h-32 object-cover rounded-md"
+                    />
+                  </div>
+                )}
+                <p className="text-sm text-gold-secondary mt-1">
+                  Upload a background image for the page (optional)
                 </p>
               </div>
             </div>

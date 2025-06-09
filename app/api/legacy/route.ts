@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     // Upload honouree photo
     let honoureePhotoPath;
     const honoureePhoto = formData.get("honoureePhoto") as File;
-    if (honoureePhoto && honoureePhoto.size > 0) {
+    if (honoureePhoto) {
       honoureePhotoPath = await uploadToSupabase(
         honoureePhoto,
         "honouree-photo"
@@ -70,8 +70,18 @@ export async function POST(req: NextRequest) {
     // Upload cover photo
     let coverPhotoPath;
     const coverPhoto = formData.get("coverPhoto") as File;
-    if (coverPhoto && coverPhoto.size > 0) {
+    if (coverPhoto) {
       coverPhotoPath = await uploadToSupabase(coverPhoto, "cover-photo");
+    }
+
+    // Upload background image
+    let backgroundImagePath;
+    const backgroundImage = formData.get("backgroundImage") as File;
+    if (backgroundImage) {
+      backgroundImagePath = await uploadToSupabase(
+        backgroundImage,
+        "background-image"
+      );
     }
 
     // Process photos
@@ -212,6 +222,7 @@ export async function POST(req: NextRequest) {
         story: formData.get("story") as string,
         honoureePhoto: honoureePhotoPath,
         coverPhoto: coverPhotoPath,
+        backgroundImage: backgroundImagePath,
         ...(formData.get("headingFont") && {
           headingFont: formData.get("headingFont") as string,
         }),

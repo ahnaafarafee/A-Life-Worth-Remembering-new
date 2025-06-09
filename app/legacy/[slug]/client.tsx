@@ -75,6 +75,7 @@ interface LegacyPage {
     text: string;
     author: string | null;
   }[];
+  backgroundImage?: string;
 }
 
 export default function LegacyPageClient({ slug }: { slug: string }) {
@@ -242,7 +243,9 @@ export default function LegacyPageClient({ slug }: { slug: string }) {
       className="min-h-screen w-full py-8 px-4 md:px-8 lg:px-12"
       style={
         {
-          backgroundImage: "url('/images/background-default-legacy.png')",
+          backgroundImage: page.backgroundImage
+            ? `url(${getSupabaseUrl(page.backgroundImage)})`
+            : "url('/images/background-default-legacy.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundAttachment: "fixed",

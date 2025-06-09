@@ -165,22 +165,30 @@ export async function PUT(
       return data.path;
     };
 
-    // Upload new photos if provided
-    let honoureePhotoPath = legacyPage.honoureePhoto;
+    // Upload honouree photo
+    let honoureePhotoPath;
     const honoureePhoto = formData.get("honoureePhoto") as File;
-    if (honoureePhoto && honoureePhoto.size > 0) {
+    if (honoureePhoto) {
       honoureePhotoPath = await uploadToSupabase(
         honoureePhoto,
-        `honouree-photo-${Date.now()}`
+        "honouree-photo"
       );
     }
 
-    let coverPhotoPath = legacyPage.coverPhoto;
+    // Upload cover photo
+    let coverPhotoPath;
     const coverPhoto = formData.get("coverPhoto") as File;
-    if (coverPhoto && coverPhoto.size > 0) {
-      coverPhotoPath = await uploadToSupabase(
-        coverPhoto,
-        `cover-photo-${Date.now()}`
+    if (coverPhoto) {
+      coverPhotoPath = await uploadToSupabase(coverPhoto, "cover-photo");
+    }
+
+    // Upload background image
+    let backgroundImagePath;
+    const backgroundImage = formData.get("backgroundImage") as File;
+    if (backgroundImage) {
+      backgroundImagePath = await uploadToSupabase(
+        backgroundImage,
+        "background-image"
       );
     }
 
@@ -339,8 +347,21 @@ export async function PUT(
     const updatedLegacyPage = await prisma.legacyPage.update({
       where: { id: legacyPage.id },
       data: {
-        honoureePhoto: honoureePhotoPath,
-        coverPhoto: coverPhotoPath,
+        pageType: formData.get("pageType") as PageType,
+        slug: formData.get("slug") as string,
+        honoureeName: formData.get("honoureeName") as string,
+        creatorName: formData.get("creatorName") as string,
+        dateOfBirth: new Date(formData.get("dateOfBirth") as string),
+        hasTransitioned: formData.get("hasTransitioned") === "true",
+        dateOfPassing: formData.get("dateOfPassing")
+          ? new Date(formData.get("dateOfPassing") as string)
+          : null,
+        relationship: formData.get("relationship") as string,
+        storyName: formData.get("storyName") as string,
+        story: formData.get("story") as string,
+        ...(honoureePhotoPath && { honoureePhoto: honoureePhotoPath }),
+        ...(coverPhotoPath && { coverPhoto: coverPhotoPath }),
+        ...(backgroundImagePath && { backgroundImage: backgroundImagePath }),
         ...(formData.get("headingFont") && {
           headingFont: formData.get("headingFont") as string,
         }),

@@ -56,6 +56,7 @@ model LegacyPage {
   storyName        String            @default("Story")
   story            String            @db.Text
   coverPhoto       String?
+  backgroundImage  String?
   honoureePhoto    String?
   status           PageStatus        @default(DRAFT)
   userId           String
