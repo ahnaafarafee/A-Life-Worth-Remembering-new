@@ -29,7 +29,7 @@ export default function PricingSection() {
     { name: "Sliding banner", classic: true, premium: true },
     { name: "Introduction", classic: true, premium: true },
     { name: "Relationships", classic: true, premium: true },
-    { name: "General knowledge", classic: true, premium: true },
+    { name: "Soul Journey Profile", classic: true, premium: true },
     { name: "Insights", classic: true, premium: true },
     { name: "Gallery", classic: "30", premium: "1000+" },
     { name: "Guest book", classic: true, premium: true },
@@ -86,7 +86,7 @@ export default function PricingSection() {
     <section className="bg-white">
       <div className="container mx-auto px-4">
         <SectionHeader
-          title="PRICING PACKAGES"
+          title="Page Options"
           subtitle="Choose the perfect package to honor your loved ones and preserve precious memories for generations to come."
         />
 
@@ -97,17 +97,17 @@ export default function PricingSection() {
               <div className="custom-card-header custom-purple-header">
                 <h2 className="custom-plan-name">Classic Single</h2>
                 <div className="custom-price">
-                  £99<span>/year</span>
+                  $99<span>/year</span>
                 </div>
               </div>
               <div className="custom-card-body">
                 <ul className="custom-feature-list">
                   <li>
                     <span className="custom-checkmark"></span>Personalized
-                    memorial page
+                    Legacy Page
                   </li>
                   <li>
-                    <span className="custom-checkmark"></span>Up to 30 photos in
+                    <span className="custom-checkmark"></span>Up to 50 photos in
                     gallery
                   </li>
                   <li>
@@ -129,7 +129,7 @@ export default function PricingSection() {
                 <div className="custom-popular-badge">RECOMMENDED</div>
                 <h2 className="custom-plan-name">Premium Single</h2>
                 <div className="custom-price">
-                  £149<span>/year</span>
+                  $149<span>/year</span>
                 </div>
               </div>
               <div className="custom-card-body">
@@ -139,7 +139,7 @@ export default function PricingSection() {
                     Classic, plus:
                   </li>
                   <li>
-                    <span className="custom-checkmark"></span>1000+ photos in
+                    <span className="custom-checkmark"></span>500 photos in
                     gallery
                   </li>
                   <li>
@@ -160,7 +160,7 @@ export default function PricingSection() {
               <div className="custom-card-header custom-purple-header">
                 <h2 className="custom-plan-name">Premium Bundle</h2>
                 <div className="custom-price">
-                  £299<span>/year</span>
+                  $299<span>/year</span>
                 </div>
               </div>
               <div className="custom-card-body">
@@ -174,21 +174,22 @@ export default function PricingSection() {
                     Storage
                   </li>
                   <li>
-                    <span className="custom-checkmark"></span>Complete
-                    Customization
+                    <span className="custom-checkmark"></span>Personalised Pages
                   </li>
                   <li>
                     <span className="custom-checkmark"></span>Advanced Family
                     Tree
-                  </li>
-                  <li>
-                    <span className="custom-checkmark"></span>Priority Support
                   </li>
                 </ul>
                 <PricingButton href="/pricing">Select Plan</PricingButton>
               </div>
             </div>
           </div>
+
+          <h1 className="text-center text-gray-700 max-w-3xl mx-auto px-4 mb-12 mt-8">
+            * All package options include one Legacy Page per person. A bundle
+            of five Legacy Pages provides one page each for up to five people
+          </h1>
 
           {/* Feature Comparison Table */}
           {showComparison && (

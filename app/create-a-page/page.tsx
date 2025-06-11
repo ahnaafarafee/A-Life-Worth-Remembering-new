@@ -596,7 +596,7 @@ export default function CreateLegacyPage() {
                   className="mb-4"
                 />
                 <h1 className="text-4xl md:text-5xl font-bold text-gold-primary text-center">
-                  CREATE A LEGACY PAGE
+                  CREATE A PAGE
                 </h1>
                 <p className="text-xl text-gold-secondary text-center max-w-2xl">
                   Take your time to create a meaningful page for yourself or a

@@ -6,7 +6,7 @@ export default function Page() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gold-primary mb-2">
-            Welcome Back
+            Welcome
           </h1>
           <p className="text-gold-secondary">
             Sign in to continue your journey
