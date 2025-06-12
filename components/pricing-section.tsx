@@ -66,7 +66,7 @@ export default function PricingSection() {
     return (
       <Link
         href={href}
-        className="relative inline-flex items-center justify-center px-16 py-4 font-semibold text-black text-lg transition-transform hover:scale-105 w-80 mx-auto"
+        className="relative inline-flex items-center justify-center px-8 sm:px-12 md:px-16 py-3 sm:py-4 font-semibold text-black text-sm sm:text-base md:text-lg transition-transform hover:scale-105 w-full sm:w-80 mx-auto"
         onClick={() => handlePlanSelect(href.split("=")[1])}
       >
         <div className="absolute inset-0">
@@ -119,7 +119,9 @@ export default function PricingSection() {
                     messages
                   </li>
                 </ul>
-                <PricingButton href="/pricing">Select Plan</PricingButton>
+                <div className="mt-auto">
+                  <PricingButton href="/pricing">Select Plan</PricingButton>
+                </div>
               </div>
             </div>
 
@@ -151,7 +153,9 @@ export default function PricingSection() {
                     with RSVPs
                   </li>
                 </ul>
-                <PricingButton href="/pricing">Select Plan</PricingButton>
+                <div className="mt-auto">
+                  <PricingButton href="/pricing">Select Plan</PricingButton>
+                </div>
               </div>
             </div>
 
@@ -181,35 +185,37 @@ export default function PricingSection() {
                     Tree
                   </li>
                 </ul>
-                <PricingButton href="/pricing">Select Plan</PricingButton>
+                <div className="mt-auto">
+                  <PricingButton href="/pricing">Select Plan</PricingButton>
+                </div>
               </div>
             </div>
           </div>
 
-          <h1 className="text-center text-gray-700 max-w-3xl mx-auto px-4 mb-12 mt-8">
+          <h1 className="text-center text-sm sm:text-base text-gray-700 max-w-3xl mx-auto px-4 mb-8 sm:mb-12 mt-6 sm:mt-8">
             * All package options include one Legacy Page per person. A bundle
             of five Legacy Pages provides one page each for up to five people
           </h1>
 
           {/* Feature Comparison Table */}
           {showComparison && (
-            <div className="mt-12 max-w-5xl mx-auto bg-white rounded-xl overflow-hidden shadow-lg border border-gold-primary/30">
-              <div className="bg-gold-primary/10 p-4 border-b border-gold-primary/20">
-                <h3 className="text-xl font-bold text-gold-primary text-center">
+            <div className="mt-8 sm:mt-12 max-w-5xl mx-auto bg-white rounded-xl overflow-hidden shadow-lg border border-gold-primary/30">
+              <div className="bg-gold-primary/10 p-3 sm:p-4 border-b border-gold-primary/20">
+                <h3 className="text-lg sm:text-xl font-bold text-gold-primary text-center">
                   Full Feature Comparison
                 </h3>
               </div>
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full min-w-[600px]">
                   <thead>
                     <tr className="bg-gray-50">
-                      <th className="py-3 px-4 text-left font-semibold text-gray-700 w-1/2">
+                      <th className="py-2 sm:py-3 px-3 sm:px-4 text-left font-semibold text-gray-700 w-1/2 text-sm sm:text-base">
                         Features
                       </th>
-                      <th className="py-3 px-4 text-center font-semibold text-purple-primary w-1/4">
+                      <th className="py-2 sm:py-3 px-3 sm:px-4 text-center font-semibold text-purple-primary w-1/4 text-sm sm:text-base">
                         Classic
                       </th>
-                      <th className="py-3 px-4 text-center font-semibold text-purple-primary w-1/4">
+                      <th className="py-2 sm:py-3 px-3 sm:px-4 text-center font-semibold text-purple-primary w-1/4 text-sm sm:text-base">
                         Premium
                       </th>
                     </tr>
@@ -220,31 +226,31 @@ export default function PricingSection() {
                         key={index}
                         className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
                       >
-                        <td className="py-2 px-4 border-t border-gray-200">
+                        <td className="py-2 px-3 sm:px-4 border-t border-gray-200 text-sm sm:text-base">
                           {feature.name}
                         </td>
-                        <td className="py-2 px-4 text-center border-t border-gray-200">
+                        <td className="py-2 px-3 sm:px-4 text-center border-t border-gray-200">
                           {typeof feature.classic === "boolean" ? (
                             feature.classic ? (
-                              <Check className="h-5 w-5 text-gold-primary mx-auto" />
+                              <Check className="h-4 w-4 sm:h-5 sm:w-5 text-gold-primary mx-auto" />
                             ) : (
                               <span className="text-gray-300">—</span>
                             )
                           ) : (
-                            <span className="text-sm text-gray-700">
+                            <span className="text-xs sm:text-sm text-gray-700">
                               {feature.classic}
                             </span>
                           )}
                         </td>
-                        <td className="py-2 px-4 text-center border-t border-gray-200">
+                        <td className="py-2 px-3 sm:px-4 text-center border-t border-gray-200">
                           {typeof feature.premium === "boolean" ? (
                             feature.premium ? (
-                              <Check className="h-5 w-5 text-gold-primary mx-auto" />
+                              <Check className="h-4 w-4 sm:h-5 sm:w-5 text-gold-primary mx-auto" />
                             ) : (
                               <span className="text-gray-300">—</span>
                             )
                           ) : (
-                            <span className="text-sm text-purple-primary font-semibold">
+                            <span className="text-xs sm:text-sm text-purple-primary font-semibold">
                               {feature.premium}
                             </span>
                           )}
@@ -257,8 +263,8 @@ export default function PricingSection() {
             </div>
           )}
 
-          <div className="text-center mt-12">
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="text-center mt-8 sm:mt-12">
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 max-w-2xl mx-auto px-4">
               Not sure which package is right for you? Contact our support team
               for personalized assistance in choosing the perfect memorial
               solution.

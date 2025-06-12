@@ -32,22 +32,26 @@ export default function Home() {
         <Navbar />
 
         {/* Hero Section */}
-        <section className="container mx-auto px-4 py-8 md:py-12 bg-white">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div className="space-y-6">
-              <h1 className="text-4xl md:text-5xl font-light text-gold-primary leading-tight">
-                CREATE YOUR ONLINE LEGACY <br />
-                <span className="font-bold">WITH PASSION AND PURPOSE</span>
+        <section className="container mx-auto px-4 py-6 md:py-12 bg-white">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center">
+            <div className="space-y-4 md:space-y-6 text-center md:text-left">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-light text-gold-primary leading-tight">
+                CREATE YOUR ONLINE LEGACY{" "}
+                <span className="block mt-1 md:mt-0 md:inline font-bold">
+                  WITH PASSION AND PURPOSE
+                </span>
               </h1>
-              <p className="text-lg text-gray-700">
+              <p className="text-base sm:text-lg text-gray-700 max-w-xl mx-auto md:mx-0">
                 A personalised platform where you can preserve the story of a
                 loved-one who has passed or journal your own life story and
                 future memorial wishes.
               </p>
-              <GoldButton href="/create-a-page">Get Started</GoldButton>
+              <div className="flex justify-center md:justify-start">
+                <GoldButton href="/create-a-page">Get Started</GoldButton>
+              </div>
             </div>
-            <div className="flex justify-center">
-              <div className="relative w-64 h-64 md:w-80 md:h-80">
+            <div className="flex justify-center mt-6 md:mt-0">
+              <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80">
                 <Image
                   src="/images/logo.png"
                   alt="A Life Worth Remembering"
@@ -64,37 +68,37 @@ export default function Home() {
           <SlidingBanner />
         </div>
         {/* Hero Banner (replacing Sliding Banner) */}
-        <div className="py-8 md:py-12">
+        <div>
           <HeroSection />
         </div>
 
         {/* Why Choose Section */}
-        <div className="py-8 md:py-12">
+        <div>
           <WhyChooseSection />
         </div>
 
         {/* Featured Memorials - New Modern Design */}
-        <div className="py-8 md:py-12">
+        <div>
           <FeaturedMemorials />
         </div>
 
         {/* Family Tree Section */}
-        <div className="py-8 md:py-12">
+        <div>
           <FamilyTreeSection />
         </div>
 
         {/* How It Works - New Design */}
-        <div className="py-8 md:py-12">
+        <div>
           <HowItWorks />
         </div>
 
         {/* Pricing Section */}
-        <div className="py-8 md:py-12">
+        <div>
           <PricingSection />
         </div>
 
         {/* Testimonials - New Design */}
-        <div className="py-8 md:py-12">
+        <div>
           <TestimonialSection />
         </div>
         {/* Media Mentions Section */}

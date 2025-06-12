@@ -16,7 +16,7 @@ export function GoldButton({
   return (
     <Link
       href={href || "#"}
-      className={`relative inline-flex items-center justify-center px-16 py-4 font-semibold text-black text-lg transition-transform hover:scale-105 ${className}`}
+      className={`relative inline-flex items-center justify-center min-w-[200px] px-8 sm:px-12 md:px-16 py-4 font-semibold text-black text-base sm:text-lg transition-transform hover:scale-105 whitespace-normal ${className}`}
     >
       <div className="absolute inset-0">
         <Image
@@ -26,7 +26,7 @@ export function GoldButton({
           className="object-contain"
         />
       </div>
-      <span className="relative z-10">{children}</span>
+      <span className="relative z-10 text-center px-2">{children}</span>
     </Link>
   );
 }
