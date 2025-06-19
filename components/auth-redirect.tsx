@@ -11,9 +11,9 @@ export default function AuthRedirect() {
   const router = useRouter();
 
   useEffect(() => {
-    if (isLoaded && isSignedIn && !isLoading && !legacyPage) {
-      router.push("/create-a-page");
-    }
+    // if (isLoaded && isSignedIn && !isLoading && !legacyPage) {
+    //   router.push("/create-a-page");
+    // }
   }, [isLoaded, isSignedIn, isLoading, legacyPage, router]);
 
   return null;
